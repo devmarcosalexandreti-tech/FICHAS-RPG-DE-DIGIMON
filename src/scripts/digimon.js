@@ -4,7 +4,7 @@
         let modalReturnFocus = null;
         let isCreating = false;
         let hasUnsavedChanges = false;
-        var expanded = false;
+        let expanded = document.getElementById('checkboxes').style.display === 'block';
 
         function clearModalError() {
             const error = document.getElementById('modalError');

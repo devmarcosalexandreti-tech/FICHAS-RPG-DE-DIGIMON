@@ -10,11 +10,11 @@ async function openSheet(page, filename) {
   await page.goto(pathToFileURL(path.join(projectRoot, filename)).href);
 }
 
-async function saveAndReopen(page, testInfo) {
+async function saveAndReopen(page, testInfo, outputFilename) {
   const downloadPromise = page.waitForEvent("download");
   await page.locator("#btnSalvar").click();
   const download = await downloadPromise;
-  const savedPath = testInfo.outputPath("saved-sheet.html");
+  const savedPath = testInfo.outputPath(outputFilename);
   await copyFile(await download.path(), savedPath);
   await page.goto(pathToFileURL(savedPath).href);
   return download.suggestedFilename();
@@ -23,10 +23,25 @@ async function saveAndReopen(page, testInfo) {
 test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) => {
   await openSheet(page, "DRPG_Ficha_Digimon_v1.5.html");
   await page.locator("#charName").fill("Teste / Digimon");
+  await page.locator(".notes-area").fill(injection);
 
   const initialRows = await page.locator("#inventoryBody tr").count();
   await page.locator("#addInventoryRowBtn").click();
   await expect(page.locator("#inventoryBody tr")).toHaveCount(initialRows + 1);
+  const inventoryInputs = page.locator("#inventoryBody tr").last().locator("input");
+  await inventoryInputs.nth(0).fill("Poção");
+  await inventoryInputs.nth(1).fill("Consumível");
+  await inventoryInputs.nth(2).fill(injection);
+
+  await page.locator("#addSkillBtn").click();
+  await page.locator("#modalCancelBtn").click();
+  await expect(page.locator("#modalOverlay")).toBeHidden();
+  await expect(page.locator("#addSkillBtn")).toBeFocused();
+
+  await page.locator("#addSkillBtn").click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#modalOverlay")).toBeHidden();
+  await expect(page.locator("#addSkillBtn")).toBeFocused();
 
   await page.locator("#addSkillBtn").click();
   await expect(page.locator("#modalOverlay")).toHaveAttribute("aria-hidden", "false");
@@ -61,27 +76,87 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await page.locator("#saveModalBtn").click();
   await expect(skill.locator(".skill-type-label")).toHaveText("Ataque editado");
 
-  const filename = await saveAndReopen(page, testInfo);
+  await page.locator("#addPowerBtn").click();
+  await page.locator("#m_nome").fill("Escudo Prismático");
+  await page.locator("#m_ben").fill("Proteção");
+  await page.locator("#m_esp").fill("Uma vez por encontro");
+  await page.locator("#saveModalBtn").click();
+  await expect(page.locator("#powersContainer .skill-name")).toHaveText("Escudo Prismático");
+
+  await page.locator("#conditionSelectTrigger").click();
+  await page.locator('#checkboxes input[value="Ofuscado"]').check();
+  await expect(page.locator("#displayValue")).toContainText("Ofuscado");
+
+  const filename = await saveAndReopen(page, testInfo, "digimon-first-save.html");
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Digimon");
+  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Poção");
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);
   await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
+  await expect(page.locator("#powersContainer .skill-name")).toHaveText("Escudo Prismático");
+  await expect(page.locator('#checkboxes input[value="Ofuscado"]')).toBeChecked();
+  await expect(page.locator("#conditionSelectTrigger")).toHaveAttribute("aria-expanded", "true");
+  await page.locator("#conditionSelectTrigger").click();
+  await expect(page.locator("#conditionSelectTrigger")).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#checkboxes")).toBeHidden();
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
   await page.locator('#skillsContainer [data-action="edit-skill"]').click();
   await expect(page.locator("#m_nome")).toHaveValue(injection);
+  await page.keyboard.press("Escape");
+
+  await page.locator('#powersContainer [data-action="delete-skill"]').click();
+  await expect(page.locator("#powersContainer .skill-item")).toHaveCount(0);
+  await saveAndReopen(page, testInfo, "digimon-second-save.html");
+  await expect(page.locator("#powersContainer .skill-item")).toHaveCount(0);
+  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
+  await expect(page.locator('#checkboxes input[value="Ofuscado"]')).toBeChecked();
+  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
 });
 
 test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) => {
   await openSheet(page, "DRPG_Ficha_Domador_v1.4.html");
   await page.locator("#charName").fill("Teste / Domador");
+  await page.locator(".notes-area").fill(injection);
 
   const courage = page.locator('[data-attribute="Coragem"]');
+  const tierCases = [
+    ["4", "TIER 0", "Covarde"],
+    ["5", "TIER 1", "Arrojado"],
+    ["14", "TIER 1", "Arrojado"],
+    ["15", "TIER 2", "Determinado"],
+    ["29", "TIER 2", "Determinado"],
+    ["30", "TIER 3", "Bravo"],
+    ["54", "TIER 3", "Bravo"],
+    ["55", "TIER 4", "Corajoso"],
+    ["79", "TIER 4", "Corajoso"],
+    ["80", "TIER 5", "Destemido"]
+  ];
+  for (const [points, tier, title] of tierCases) {
+    await courage.fill(points);
+    await expect(page.locator("#t-Coragem")).toHaveText(tier);
+    await expect(page.locator("#tit-Coragem")).toHaveText(title);
+  }
   await courage.fill("30");
-  await expect(page.locator("#t-Coragem")).toHaveText("TIER 3");
-  await expect(page.locator("#tit-Coragem")).toHaveText("Bravo");
 
   const initialRows = await page.locator("#inventoryBody tr").count();
   await page.locator("#addInventoryRowBtn").click();
   await expect(page.locator("#inventoryBody tr")).toHaveCount(initialRows + 1);
+  const inventoryInputs = page.locator("#inventoryBody tr").last().locator("input");
+  await inventoryInputs.nth(0).fill("Notebook");
+  await inventoryInputs.nth(1).fill("Equipamento");
+  await inventoryInputs.nth(2).fill(injection);
+
+  await page.locator("#addSkillBtn").click();
+  await page.locator("#skillCancelBtn").click();
+  await expect(page.locator("#skillModalOverlay")).toBeHidden();
+  await expect(page.locator("#addSkillBtn")).toBeFocused();
+
+  await page.locator("#addSkillBtn").click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#skillModalOverlay")).toBeHidden();
+  await expect(page.locator("#addSkillBtn")).toBeFocused();
 
   await page.locator("#addSkillBtn").click();
   await expect(page.locator("#skillModalOverlay")).toHaveAttribute("aria-hidden", "false");
@@ -109,11 +184,26 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await page.locator("#skillSaveBtn").click();
   await expect(skill.locator(".skill-type-label")).toHaveText("Social editada");
 
-  const filename = await saveAndReopen(page, testInfo);
+  const filename = await saveAndReopen(page, testInfo, "domador-first-save.html");
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Domador");
+  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Notebook");
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);
+  await expect(courage).toHaveValue("30");
+  await expect(page.locator("#t-Coragem")).toHaveText("TIER 3");
+  await expect(page.locator("#tit-Coragem")).toHaveText("Bravo");
   await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
   await page.locator('#skillsContainer [data-action="edit-skill"]').click();
   await expect(page.locator("#s_nome")).toHaveValue(injection);
+  await page.keyboard.press("Escape");
+
+  await page.locator('#skillsContainer [data-action="delete-skill"]').click();
+  await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
+  await saveAndReopen(page, testInfo, "domador-second-save.html");
+  await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
+  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator("#t-Coragem")).toHaveText("TIER 3");
+  expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
 });
