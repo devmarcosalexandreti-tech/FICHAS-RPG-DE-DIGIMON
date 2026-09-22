@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha do Domador - Amiel Jones</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            width: 800px;
+            min-height: 1050px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #e67e22;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .title-bar {
+            background: #e67e22;
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin: 15px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .grid-social {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+
+        .box {
+            border: 1px solid #dcdde1;
+            padding: 8px;
+            border-radius: 5px;
+            background: #fff;
+            position: relative;
+        }
+
+        .box-social {
+            border: 1px solid #dcdde1;
+            padding: 8px;
+            border-radius: 5px;
+            background: #fffaf5;
+            text-align: center;
+        }
+
+        label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        input,
+        textarea {
+            border: none;
+            width: 100%;
+            font-family: inherit;
+            background: transparent;
+            outline: none;
+            color: #2c3e50;
+            box-sizing: border-box;
+        }
+
+        input {
+            font-weight: bold;
+            color: #d35400;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow: hidden;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 140px;
+            border: 1px solid #dcdde1;
+            border-radius: 6px;
+            padding: 10px;
+            background: #fffaf5;
+            box-sizing: border-box;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .tier-badge {
+            background: #e67e22;
+            color: white;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .title-display {
+            color: #d35400;
+            font-weight: bold;
+            font-size: 13px;
+            min-height: 18px;
+            border-bottom: 1px dashed #fab17a;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .skill-item {
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background: #fafafa;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            cursor: help;
+        }
+
+        .skill-item:hover {
+            background: #fff5eb;
+            border-color: #e67e22;
+        }
+
+        .skill-desc {
+            visibility: hidden;
+            width: 90%;
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            left: 5%;
+            top: 110%;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
+            border: 1px solid #e67e22;
+            pointer-events: none;
+        }
+
+        .skill-item:hover .skill-desc {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(5px);
+        }
+
+        .btn-add {
+            background: white;
+            color: #e67e22;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-action {
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 3px;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #FFEE8C;
+            color: #000;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #2980b9;
+            outline-offset: 2px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+        }
+
+        .skill-type-label {
+            color: #e67e22;
+            font-size: 11px;
+            margin-right: 10px;
+        }
+
+        
+
+        .skill-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .skill-modal-overlay[hidden] {
+            display: none;
+        }
+        .skill-modal-box {
+            width: min(560px, 92vw);
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #e67e22;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            padding: 18px;
+            box-sizing: border-box;
+        }
+        .skill-modal-title {
+            margin: 0 0 10px 0;
+            color: #d35400;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        .skill-modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .skill-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn-skill-save,
+        .btn-skill-cancel {
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-skill-save { background: #e67e22; color: #fff; }
+        .btn-skill-cancel { background: #eee; color: #2c3e50; }
+
+        .skill-modal-box [aria-invalid="true"] {
+            border-color: #c0392b;
+            box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.15);
+        }
+
+        .form-error {
+            margin: 10px 0 0;
+            color: #a93226;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-error[hidden] {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 10px;
+            color: #7f8c8d;
+            border-bottom: 2px solid #e67e22;
+            padding: 5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+            padding: 5px;
+        }
+
+        .inv-input {
+            font-weight: normal;
+            font-size: 12px;
+            color: #2c3e50;
+        }
+
+        #btnSalvar {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            padding: 12px 20px;
+            background-color: #e67e22;
+            color: white;
+            border: 2px solid #d35400;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <h1>Ficha do Domador</h1>
+
+        <div class="grid-5">
+            <div class="box"><label>Nome</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label>Nível</label><input type="number" value=""></div>
+            <div class="box"><label>PV Máximo</label><input type="number" value=""></div>
+            <div class="box"><label>Deslocamento (Q)</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>P. Aspecto</label><input type="number" value=""></div>
+        </div>
+
+        <div class="grid-5" style="margin-top: 10px;">
+            <div class="box"><label>Sexo</label><input type="text" value=""></div>
+            <div class="box"><label>Idade</label><input type="number" value=""></div>
+            <div class="box"><label>Altura (m)</label><input type="number" step="0.1" min="1.0" max="2.5" value="">
+            </div>
+            <div class="box"><label>Etnia</label><input type="text" value=""></div>
+            <div class="box"><label>Nacionalidade</label><input type="text" value=""></div>
+        </div>
+
+        <div class="title-bar">CONVICÇÃO &amp; ASPECTOS</div>
+        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #e67e22;">
+            <input type="text" value="Convicção" style="font-size: 14px; color: #d35400;">
+            <textarea rows="2"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="box"><input type="text" value="Aspecto 1"><textarea rows="4">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 2"><textarea rows="4">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 3"><textarea rows="4">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 4"><textarea rows="4">Descrição</textarea></div>
+        </div>
+
+        <div class="title-bar">ATRIBUTOS SOCIAIS</div>
+        <div id="socialGrid" class="grid-social">
+            <div class="box-social">
+                <span id="t-Charme" class="tier-badge">TIER 0</span><label>Charme</label>
+                <div id="tit-Charme" class="title-display">Sem graça</div>
+                <input type="number" id="pts-Charme" value="0" data-attribute="Charme"
+                    style="width:45px; text-align:center;">
+            </div>
+            <div class="box-social">
+                <span id="t-Conhecimento" class="tier-badge">TIER 0</span><label>Conhecimento</label>
+                <div id="tit-Conhecimento" class="title-display">Preguiçoso</div>
+                <input type="number" id="pts-Conhecimento" value="0" data-attribute="Conhecimento"
+                    style="width:45px; text-align:center;">
+            </div>
+            <div class="box-social">
+                <span id="t-Coragem" class="tier-badge">TIER 0</span><label>Coragem</label>
+                <div id="tit-Coragem" class="title-display">Covarde</div>
+                <input type="number" id="pts-Coragem" value="0" data-attribute="Coragem"
+                    style="width:45px; text-align:center;">
+            </div>
+            <div class="box-social">
+                <span id="t-Disciplina" class="tier-badge">TIER 0</span><label>Disciplina</label>
+                <div id="tit-Disciplina" class="title-display">Desatento</div>
+                <input type="number" id="pts-Disciplina" value="0" data-attribute="Disciplina"
+                    style="width:45px; text-align:center;">
+            </div>
+            <div class="box-social">
+                <span id="t-Empatia" class="tier-badge">TIER 0</span><label>Empatia</label>
+                <div id="tit-Empatia" class="title-display">Indiferente</div>
+                <input type="number" id="pts-Empatia" value="0" data-attribute="Empatia"
+                    style="width:45px; text-align:center;">
+            </div>
+            <div class="box-social">
+                <span id="t-Expressão" class="tier-badge">TIER 0</span><label>Expressão</label>
+                <div id="tit-Expressão" class="title-display">Monótona</div>
+                <input type="number" id="pts-Expressão" value="0" data-attribute="Expressão"
+                    style="width:45px; text-align:center;">
+            </div>
+        </div>
+
+        <div class="title-bar">
+            HABILIDADES
+            <button type="button" id="addSkillBtn" class="btn-add" aria-label="Adicionar habilidade"
+                title="Adicionar habilidade">+</button>
+        </div>
+        <div id="skillsContainer">
+
+
+
+
+        </div>
+
+
+
+        <div class="title-bar">
+            INVENTÁRIO
+            <button type="button" id="addInventoryRowBtn" class="btn-add"
+                aria-label="Adicionar linha ao inventário" title="Adicionar linha ao inventário">+</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:25%">Item</th>
+                    <th style="width:20%">Tipo</th>
+                    <th style="width:55%">Descrição / Efeito</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody">
+                <tr>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" value="-"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="title-bar">TRABALHO</div>
+        <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px;">
+            <div class="box"><label>Ocupação</label><input type="text" value=""></div>
+            <div class="box"><label>Ganho Semanal (PR)</label><input type="number" step="0.25" value=""></div>
+            <div class="box"><label>Horário</label><input type="text" value=""></div>
+        </div>
+        <div class="grid-4" style="gap: 12px; margin-bottom: 20px;">
+            <div class="box"><label>Saldo (PR)</label><input type="number" step="0.25" value=""></div>
+            <div class="box"><label>Custo Semanal (PR)</label><input type="number" step="0.25" value=""></div>
+            <div class="box"><label>Atributo</label><input type="text" value=""></div>
+            <div class="box"><label>Bônus</label><input type="text" value=""></div>
+        </div>
+
+        <div class="title-bar">ANOTAÇÕES</div>
+        <textarea class="notes-area" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
+    </div>
+    <div id="skillModalOverlay" class="skill-modal-overlay" hidden aria-hidden="true">
+        <div class="skill-modal-box" role="dialog" aria-modal="true" aria-labelledby="skillModalTitle"
+            aria-describedby="skillModalError">
+            <h2 id="skillModalTitle" class="skill-modal-title">Nova Habilidade</h2>
+            <div class="skill-modal-grid">
+                <div>
+                    <label for="s_nome">Nome</label>
+                    <input type="text" id="s_nome" value="" required aria-describedby="skillModalError">
+                </div>
+                <div>
+                    <label for="s_tipo">Tipo</label>
+                    <input type="text" id="s_tipo" value="">
+                </div>
+            </div>
+            <div style="margin-top:10px;">
+                <label for="s_desc">Descrição</label>
+                <textarea id="s_desc" rows="4" style="width:100%; border:1px solid #dcdde1; border-radius:4px; padding:6px; background:#f9f9f9;"></textarea>
+            </div>
+            <p id="skillModalError" class="form-error" role="alert" aria-live="assertive" hidden></p>
+            <div class="skill-modal-actions">
+                <button type="button" id="skillCancelBtn" class="btn-skill-cancel">Cancelar</button>
+                <button type="button" id="skillSaveBtn" class="btn-skill-save">Confirmar</button>
+            </div>
+        </div>
+    </div>
+<button type="button" id="btnSalvar"><span aria-hidden="true">💾</span> Baixar Ficha</button>
+    <script>
+        const titulosData = {
+            "Charme": ["Sem graça", "Notável", "Presença", "Chamativo", "Elegante", "Charmoso"],
+            "Conhecimento": ["Preguiçoso", "Entendido", "Estudado", "Acadêmico", "Enciclopédico", "Erudito"],
+            "Coragem": ["Covarde", "Arrojado", "Determinado", "Bravo", "Corajoso", "Destemido"],
+            "Disciplina": ["Desatento", "Ciente", "Persistente", "Minucioso", "Perito", "Magistral"],
+            "Empatia": ["Indiferente", "Inofensivo", "Gentil", "Generoso", "Altruista", "Angelical"],
+            "Expressão": ["Monótona", "Rudimentar", "Eloquente", "Persuasivo", "Inspirador", "Fascinante"]
+        };
+
+        function getTier(pts) {
+            if (pts >= 80) return 5; if (pts >= 55) return 4; if (pts >= 30) return 3;
+            if (pts >= 15) return 2; if (pts >= 5) return 1; return 0;
+        }
+
+        function updateAttr(nome) {
+            const el = document.getElementById(`pts-${nome}`);
+            const val = parseInt(el.value) || 0;
+            const tier = getTier(val);
+            document.getElementById(`t-${nome}`).innerText = `TIER ${tier}`;
+            document.getElementById(`tit-${nome}`).innerText = titulosData[nome][tier];
+            el.setAttribute('value', val);
+            markDirty();
+        }
+
+        let currentSkillEditingEl = null;
+        let skillModalReturnFocus = null;
+        let hasUnsavedChanges = false;
+
+        function createUiElement(tagName, options = {}) {
+            const element = document.createElement(tagName);
+            if (options.className) element.className = options.className;
+            if (options.text !== undefined) element.textContent = options.text;
+            if (options.type) element.type = options.type;
+            if (options.value !== undefined) element.value = options.value;
+            if (options.dataset) Object.assign(element.dataset, options.dataset);
+            return element;
+        }
+
+        function createActionButton(className, text, action) {
+            return createUiElement('button', {
+                className,
+                text,
+                type: 'button',
+                dataset: { action }
+            });
+        }
+
+        function clearSkillModalError() {
+            const error = document.getElementById('skillModalError');
+            const nameInput = document.getElementById('s_nome');
+            error.textContent = '';
+            error.hidden = true;
+            nameInput.removeAttribute('aria-invalid');
+        }
+
+        function showSkillModalError(message) {
+            const error = document.getElementById('skillModalError');
+            const nameInput = document.getElementById('s_nome');
+            error.textContent = message;
+            error.hidden = false;
+            nameInput.setAttribute('aria-invalid', 'true');
+            nameInput.focus();
+        }
+
+        function trapSkillModalFocus(event) {
+            if (event.key !== 'Tab') return;
+            const modal = document.querySelector('.skill-modal-box');
+            const focusable = Array.from(modal.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'));
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+
+        function markDirty() {
+            hasUnsavedChanges = true;
+        }
+        window.addEventListener('beforeunload', function (e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        function openSkillModal(editingEl = null) {
+            currentSkillEditingEl = editingEl;
+            skillModalReturnFocus = document.activeElement;
+            const overlay = document.getElementById('skillModalOverlay');
+            const title = document.getElementById('skillModalTitle');
+            const nome = document.getElementById('s_nome');
+            const tipo = document.getElementById('s_tipo');
+            const desc = document.getElementById('s_desc');
+
+            if (editingEl) {
+                title.innerText = 'Editar Habilidade';
+                nome.value = editingEl.querySelector('.skill-name')?.innerText || '';
+                tipo.value = editingEl.querySelector('.skill-type-label')?.innerText || '';
+                desc.value = editingEl.querySelector('.desc-info')?.innerText || '';
+            } else {
+                title.innerText = 'Nova Habilidade';
+                nome.value = '';
+                tipo.value = '';
+                desc.value = '';
+            }
+
+            clearSkillModalError();
+            overlay.hidden = false;
+            overlay.setAttribute('aria-hidden', 'false');
+            nome.focus();
+        }
+
+        function closeSkillModal() {
+            const overlay = document.getElementById('skillModalOverlay');
+            overlay.hidden = true;
+            overlay.setAttribute('aria-hidden', 'true');
+            clearSkillModalError();
+            skillModalReturnFocus?.focus();
+            skillModalReturnFocus = null;
+        }
+
+        function editSkill(btn) {
+            const item = btn.closest('.skill-item');
+            openSkillModal(item);
+        }
+
+        function addSkill() {
+            openSkillModal(null);
+        }
+
+        function confirmSkillModal() {
+            const n = document.getElementById('s_nome').value.trim();
+            const t = document.getElementById('s_tipo').value.trim();
+            const d = document.getElementById('s_desc').value.trim();
+
+            if (!n) {
+                showSkillModalError('Informe o nome da habilidade.');
+                return;
+            }
+            clearSkillModalError();
+
+            if (currentSkillEditingEl) {
+                currentSkillEditingEl.querySelector('.skill-name').innerText = n;
+                currentSkillEditingEl.querySelector('.skill-type-label').innerText = t;
+                currentSkillEditingEl.querySelector('.desc-tipo').innerText = t;
+                currentSkillEditingEl.querySelector('.desc-info').innerText = d;
+                updateSkillActionLabels(currentSkillEditingEl, n);
+            } else {
+                const div = createUiElement('div', { className: 'skill-item' });
+                const name = createUiElement('span', { className: 'skill-name', text: n });
+                const actions = createUiElement('div', { className: 'skill-actions' });
+                const typeLabel = createUiElement('span', { className: 'skill-type-label', text: t });
+                const editButton = createActionButton('btn-action btn-edit', '✏️', 'edit-skill');
+                const deleteButton = createActionButton('btn-action btn-delete', 'X', 'delete-skill');
+                actions.append(typeLabel, editButton, deleteButton);
+                const description = createUiElement('div', { className: 'skill-desc' });
+                const typeTitle = createUiElement('b', { text: 'Tipo:' });
+                const typeValue = createUiElement('span', { className: 'desc-tipo', text: t });
+                const descriptionTitle = createUiElement('b', { text: 'Descrição:' });
+                const descriptionValue = createUiElement('span', { className: 'desc-info', text: d });
+                description.append(typeTitle, document.createTextNode(' '), typeValue,
+                    document.createElement('br'), descriptionTitle, document.createTextNode(' '), descriptionValue);
+                div.append(name, actions, description);
+                updateSkillActionLabels(div, n);
+                document.getElementById('skillsContainer').appendChild(div);
+            }
+
+            markDirty();
+            closeSkillModal();
+        }
+
+        function updateSkillActionLabels(item, name) {
+            const accessibleName = name.trim() || 'sem nome';
+            const editButton = item.querySelector('[data-action="edit-skill"]');
+            const deleteButton = item.querySelector('[data-action="delete-skill"]');
+            editButton.setAttribute('aria-label', `Editar habilidade ${accessibleName}`);
+            editButton.title = 'Editar habilidade';
+            deleteButton.setAttribute('aria-label', `Excluir habilidade ${accessibleName}`);
+            deleteButton.title = 'Excluir habilidade';
+        }
+        function addRow() {
+            const body = document.getElementById('inventoryBody');
+            const row = createUiElement('tr');
+            for (let index = 0; index < 3; index++) {
+                const cell = createUiElement('td');
+                const input = createUiElement('input', { className: 'inv-input', type: 'text', value: '-' });
+                cell.appendChild(input);
+                row.appendChild(cell);
+            }
+            body.appendChild(row);
+            markDirty();
+        }
+
+        function autoGrowTextarea(el) {
+            if (!el) return;
+            el.style.height = 'auto';
+            el.style.height = Math.max(el.scrollHeight, 140) + 'px';
+        }
+
+        function init() {
+            Object.keys(titulosData).forEach(attr => updateAttr(attr));
+            document.getElementById('socialGrid').addEventListener('input', function (e) {
+                if (e.target.matches('[data-attribute]')) updateAttr(e.target.dataset.attribute);
+            });
+            document.getElementById('addSkillBtn').addEventListener('click', addSkill);
+            document.getElementById('addInventoryRowBtn').addEventListener('click', addRow);
+            document.getElementById('btnSalvar').addEventListener('click', saveFile);
+            document.getElementById('skillCancelBtn').addEventListener('click', closeSkillModal);
+            document.getElementById('skillSaveBtn').addEventListener('click', confirmSkillModal);
+
+            document.getElementById('skillsContainer').addEventListener('click', function (e) {
+                const actionButton = e.target.closest('[data-action]');
+                if (!actionButton) return;
+                if (actionButton.dataset.action === 'edit-skill') editSkill(actionButton);
+                if (actionButton.dataset.action === 'delete-skill') {
+                    actionButton.closest('.skill-item').remove();
+                    markDirty();
+                }
+            });
+
+            document.getElementById('skillModalOverlay').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    // Não fecha ao clicar fora da caixa.
+                    e.stopPropagation();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                const overlay = document.getElementById('skillModalOverlay');
+                if (overlay.hidden) return;
+                if (e.key === 'Escape') {
+                    closeSkillModal();
+                    return;
+                }
+                trapSkillModalFocus(e);
+            });
+
+            document.addEventListener('input', function (e) {
+                if (e.target.matches('input, textarea')) markDirty();
+                if (e.target.id === 's_nome' && e.target.value.trim()) clearSkillModalError();
+            });
+            document.addEventListener('change', function (e) {
+                if (e.target.matches('input, textarea, select')) markDirty();
+            });
+
+            const notes = document.querySelector('.notes-area');
+            if (notes) {
+                autoGrowTextarea(notes);
+                notes.addEventListener('input', function () {
+                    autoGrowTextarea(notes);
+                });
+            }
+
+            hasUnsavedChanges = false;
+        }
+
+        function copyFormState(source, target) {
+            const sourceFields = source.querySelectorAll('input, textarea, select');
+            const targetFields = target.querySelectorAll('input, textarea, select');
+
+            sourceFields.forEach((field, index) => {
+                const targetField = targetFields[index];
+                if (field.matches('textarea')) {
+                    targetField.textContent = field.value;
+                    return;
+                }
+                if (field.matches('select')) {
+                    Array.from(field.options).forEach((option, optionIndex) => {
+                        targetField.options[optionIndex].toggleAttribute('selected', option.selected);
+                    });
+                    return;
+                }
+
+                targetField.setAttribute('value', field.value);
+                if (field.matches('[type="checkbox"], [type="radio"]')) {
+                    targetField.toggleAttribute('checked', field.checked);
+                }
+            });
+        }
+
+        function serializeCurrentSheet() {
+            const documentClone = document.documentElement.cloneNode(true);
+            copyFormState(document, documentClone);
+            return '<!DOCTYPE html>\n' + documentClone.outerHTML;
+        }
+
+        function sanitizeFilename(value, fallback) {
+            const sanitized = String(value || '')
+                .trim()
+                .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
+                .replace(/\s+/g, '_')
+                .replace(/[. ]+$/g, '')
+                .slice(0, 80);
+            return sanitized || fallback;
+        }
+
+        function downloadCurrentSheet(filename) {
+            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = createUiElement('a');
+            link.href = url;
+            link.download = filename;
+            link.hidden = true;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+        }
+
+        function saveFile() {
+            const nome = sanitizeFilename(document.getElementById('charName').value, 'Ficha_Domador');
+            const data = new Date().toLocaleDateString().replace(/\//g, '-');
+            downloadCurrentSheet(`DRPG_${nome}_${data}.html`);
+            hasUnsavedChanges = false;
+        }
+
+        window.addEventListener('load', init);
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DRPG - Ficha de Digimon</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estrutura Contínua */
+        .page {
+            width: 800px;
+            min-height: 1050px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #34495e;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .title-bar {
+            background: #34495e;
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin: 20px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 2fr);
+            gap: 10px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .box {
+            border: 1px solid #dcdde1;
+            padding: 8px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        input {
+            border: none;
+            width: 95%;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2980b9;
+            background: transparent;
+            outline: none;
+        }
+
+        /* Estilo das Habilidades e Poderes */
+        .skill-item {
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .skill-item:hover {
+            background: #f1f4f9;
+            border-color: #3498db;
+        }
+
+        .skill-desc {
+            visibility: hidden;
+            width: 90%;
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            left: 5%;
+            top: 110%;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            border: 1px solid #3498db;
+        }
+
+        .skill-item:hover .skill-desc {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .skill-desc b {
+            color: #3498db;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        /* Botões */
+        #btnSalvar {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            padding: 12px 20px;
+            background-color: #34495e;
+            color: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-add {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            border: none;
+            border-radius: 3px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .btn-edit {
+            background: #FFEE8C;
+            color: #2c3e50;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #f39c12;
+            outline-offset: 2px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+        }
+
+        .skill-actions {
+            display: inline-block;
+            float: right;
+        }
+
+        .skill-type-label {
+            color: #3498db;
+            font-size: 11px;
+            margin-right: 10px;
+        }
+
+        .inventory-row {
+            height: 40px;
+        }
+
+        .inventory-cell {
+            border-bottom: 1px solid #eee;
+        }
+
+        .inventory-input {
+            width: 95%;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .inventory-input-wide {
+            width: 100%;
+            font-weight: normal;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #dcdde1;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fffcf5;
+            margin-top: 5px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .multiselect {
+            width: 100%;
+            position: relative;
+        }
+
+        .selectBox {
+            cursor: pointer;
+            background: #fdfdfd;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            text-align: left;
+            font: inherit;
+        }
+
+        /* Ajuste para o texto parecer um campo da ficha */
+        #displayValue {
+            font-size: 14px;
+            color: #2980b9;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            padding-top: 2px;
+        }
+
+        /* O Menu Dropdown */
+        #checkboxes {
+            display: none;
+            border: 1px solid #dcdde1;
+            background: white;
+            position: absolute;
+            width: 200px;
+            /* Largura fixa para não cobrir a tela toda */
+            right: 0;
+            /* Alinha à direita da box */
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        #checkboxes label {
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            color: #2980b9;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        #checkboxes label:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Títulos das categorias (Mentais, Corporais, etc) */
+        .group-title {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            padding: 4px 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #checkboxes input[type="checkbox"] {
+            margin-right: 10px;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        #modalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalOverlay[hidden] {
+            display: none;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 600px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .modal-box h2 {
+            margin: 0;
+            color: #e67e22;
+            font-size: 18px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-box label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        /* Inputs normais ficam com tamanho baseado no conteúdo ou grid */
+        .modal-box input {
+            border: 1px solid #dcdde1;
+            padding: 6px;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        #modalFields>input,
+        .grid-modal input {
+            width: 100%;
+        }
+
+        /* Textareas (Descrição/Efeito) ocupam a largura toda para facilitar a escrita */
+        .modal-box textarea {
+            border: 1px solid #dcdde1;
+            padding: 6px;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 50px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal-box [aria-invalid="true"] {
+            border-color: #c0392b;
+            box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.15);
+        }
+
+        .form-error {
+            margin: 2px 0 0;
+            color: #a93226;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-error[hidden] {
+            display: none;
+        }
+
+        .grid-modal {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .modal-btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-btns button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-save {
+            background: #e67e22;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <h1>DIGIMON RPG</h1>
+
+        <div class="grid-4">
+            <div class="box"><label>Espécie</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label>Nível</label><input type="text" value=""></div>
+            <div class="box"><label>Singularidade</label><input type="text" value=""></div>
+            <div class="box"><label>Campo</label><input type="text" value=""></div>
+            <div class="box"><label>Tamanho</label><input type="text" value=""></div>
+            <div class="box"><label>Deslocamento</label><input type="text" value=""></div>
+            <div class="box"><label>Sentido</label><input type="text" value=""></div>
+        </div>
+
+        <div class="title-bar">ATRIBUTOS</div>
+        <div class="grid-4">
+            <div class="box"><label>Saúde Digital (SD)</label><input type="text" value=""></div>
+            <div class="box"><label>Saúde Temporária</label><input type="text" value=""></div>
+            <div class="box"><label>Energia</label><input type="text" value=""></div>
+            <div class="box"><label>Energia Temporária</label><input type="text" value=""></div>
+            <div class="box"><label>Força</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Agilidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Precisão</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Vitalidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Espírito</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Adaptabilidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Lmt. Energia</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Memória</label>
+                <div style="display: flex; align-items: center; justify-content: space-around; gap: 5px;">
+                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">SALDO</label>
+                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    </div>
+
+                    <span style="color: #2980b9; font-weight: bold; margin-top: 10px;">|</span>
+
+                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
+                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title-bar">COMBATE</div>
+
+        <div class="grid-2">
+            <div class="box" style="margin-bottom: 10px;"><label>Lista de Magias</label><input type="text" value="">
+            </div>
+            <div class="box" style="margin-bottom: 10px;">
+                <label>Condições</label>
+                <div class="multiselect">
+                    <button type="button" class="selectBox" id="conditionSelectTrigger" aria-expanded="false"
+                        aria-controls="checkboxes" aria-haspopup="true">
+                        <span id="displayValue">Selecionar Condições...</span>
+                        <span class="overSelect"></span>
+                    </button>
+
+                    <div id="checkboxes" style="display: none;" role="group" aria-label="Condições do Digimon">
+                        <div class="group-title">MENTAIS</div>
+                        <label><input type="checkbox" value="Abalado"> Abalado</label>
+                        <label><input type="checkbox" value="Encantado"> Encantado</label>
+                        <label><input type="checkbox" value="Em Pânico"> Em Pânico</label>
+                        <label><input type="checkbox" value="Amedrontrado">
+                            Amedrontrado</label>
+                        <label><input type="checkbox" value="Fascinado"> Fascinado</label>
+                        <label><input type="checkbox" value="Enfurecido"> Enfurecido</label>
+                        <label><input type="checkbox" value="Fatigado"> Fatigado</label>
+                        <label><input type="checkbox" value="Frustrado"> Frustrado</label>
+                        <label><input type="checkbox" value="Sonolento"> Sonolento</label>
+                        <label><input type="checkbox" value="Provocado"> Provocado</label>
+
+                        <div class="group-title">NERVOSAS</div>
+                        <label><input type="checkbox" value="Ofuscado"> Ofuscado</label>
+                        <label><input type="checkbox" value="Atordoado"> Atordoado</label>
+                        <label><input type="checkbox" value="Em Choque"> Em Choque</label>
+                        <label><input type="checkbox" value="Lento"> Lento</label>
+                        <label><input type="checkbox" value="Imóvel"> Imóvel</label>
+                        <label><input type="checkbox" value="Enjoado"> Enjoado</label>
+                        <label><input type="checkbox" value="Paralisado"> Paralisado</label>
+
+                        <div class="group-title">CORPORAIS</div>
+                        <label><input type="checkbox" value="Agarrado"> Agarrado</label>
+                        <label><input type="checkbox" value="Contaminado">
+                            Contaminação</label>
+                        <label><input type="checkbox" value="Congelado"> Congelado</label>
+                        <label><input type="checkbox" value="Envenenado"> Veneno</label>
+                        <label><input type="checkbox" value="Derrubado"> Derrubado</label>
+                        <label><input type="checkbox" value="Hidratado"> Hidratado</label>
+                        <label><input type="checkbox" value="Encharcado"> Encharcado</label>
+                        <label><input type="checkbox" value="Abençoado"> Abençoado</label>
+                        <label><input type="checkbox" value="Amaldiçoado">
+                            Amaldiçoado</label>
+                        <label><input type="checkbox" value="Chamuscado"> Chamuscar</label>
+                        <label><input type="checkbox" value="Fortificado">
+                            Fortificar</label>
+                        <label><input type="checkbox" value="Sangrando"> Sangrando</label>
+                        <label><input type="checkbox" value="DOT"> DOT</label>
+
+                        <div class="group-title">ESPECIAIS</div>
+                        <label><input type="checkbox" value="sob_portas_da_morte"> Sob
+                            Portas da Morte</label>
+                        <label><input type="checkbox" value="morto"> Morto</label>
+                        <label><input type="checkbox" value="inconsciente">
+                            Inconsciente</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-2">
+            <div class="box" style="margin-bottom: 10px;"><label>Resistência</label><input type="text" value="">
+            </div>
+            <div class="box" style="margin-bottom: 10px;"><label>Vulnerabilidade</label><input type="text" value="">
+            </div>
+        </div>
+
+        <div class="grid-4">
+            <div class="box"><label>Iniciativa</label><input type="number" value="0"></div>
+            <div class="box"><label>Acerto</label><input type="number" value="0"></div>
+            <div class="box"><label>Esquiva</label><input type="number" value="0"></div>
+            <div class="box"><label>Fortificação</label><input type="number" value="0"></div>
+            <div class="box"><label>Furtividade</label><input type="number" value="0"></div>
+            <div class="box"><label>Manobra</label><input type="number" value="0"></div>
+            <div class="box"><label>BCA</label><input type="number" min="-3" max="3" value="0"></div>
+            <div class="box"><label>BCE</label><input type="number" min="-3" max="3" value="0"></div>
+        </div>
+
+        <div class="title-bar">
+            INVENTÁRIO
+            <button type="button" id="addInventoryRowBtn" class="btn-add"
+                aria-label="Adicionar linha ao inventário" title="Adicionar linha ao inventário">+</button>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th
+                        style="width: 25%; text-align: left; font-size: 10px; color: #7f8c8d; border-bottom: 2px solid #34495e; padding: 5px;">
+                        ITEM</th>
+                    <th
+                        style="width: 25%; text-align: left; font-size: 10px; color: #7f8c8d; border-bottom: 2px solid #34495e; padding: 5px;">
+                        TIPO</th>
+                    <th
+                        style="width: 50%; text-align: left; font-size: 10px; color: #7f8c8d; border-bottom: 2px solid #34495e; padding: 5px;">
+                        DESCRIÇÃO</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody">
+                <tr style="height: 40px;">
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 100%; background: transparent; border: none; outline: none; font-weight: normal;"
+                            value="-"></td>
+                </tr>
+                <tr style="height: 40px;">
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 100%; background: transparent; border: none; outline: none; font-weight: normal;"
+                            value="-"></td>
+                </tr>
+                <tr style="height: 40px;">
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 100%; background: transparent; border: none; outline: none; font-weight: normal;"
+                            value="-"></td>
+                </tr>
+                <tr style="height: 40px;">
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 95%; background: transparent; border: none; outline: none;" value="-"></td>
+                    <td style="border-bottom: 1px solid #eee;"><input type="text"
+                            style="width: 100%; background: transparent; border: none; outline: none; font-weight: normal;"
+                            value="-"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="title-bar">
+            HABILIDADES
+            <button type="button" id="addSkillBtn" class="btn-add" aria-label="Adicionar habilidade"
+                title="Adicionar habilidade">+</button>
+        </div>
+        <div id="skillsContainer">
+
+
+
+
+        </div>
+
+        <div class="title-bar">
+            PODERES
+            <button type="button" id="addPowerBtn" class="btn-add" aria-label="Adicionar poder"
+                title="Adicionar poder">+</button>
+        </div>
+        <div id="powersContainer"></div>
+
+        <div class="title-bar">ANOTAÇÕES</div>
+        <textarea class="notes-area" placeholder="Anotações da campanha..."></textarea>
+    </div>
+
+
+
+
+
+    <button type="button" id="btnSalvar"><span aria-hidden="true">💾</span> Baixar Ficha</button>
+
+    <div id="modalOverlay" hidden aria-hidden="true">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+            aria-describedby="modalError">
+            <h2 id="modalTitle">Nova Habilidade</h2>
+            <div id="modalFields" style="display: flex; flex-direction: column; gap: 8px;"><label
+                    for="m_nome">Nome:</label><input type="text" id="m_nome" value="Ainda Vivo" required
+                    aria-describedby="modalError"><label for="m_tipo">Tipo:</label><input type="text" id="m_tipo"
+                    value="Herdável">
+                <div class="grid-modal">
+                    <div><label for="m_alc">Alcance:</label><input type="text" id="m_alc" value="Visão"></div>
+                    <div><label for="m_alv">Alvo:</label><input type="text" id="m_alv" value="Único"></div>
+                    <div><label for="m_dur">Duração:</label><input type="text" id="m_dur" value="Instantâneo"></div>
+                    <div><label for="m_aca">Ação:</label><input type="text" id="m_aca" value="Interromper"></div>
+                    <div><label for="m_uso">Uso:</label><input type="text" id="m_uso" value="2/2"></div>
+                </div><label for="m_desc">Descrição:</label><textarea
+                    id="m_desc">Invoca um escudo prismático que protege o aliado de um dano fatal.</textarea><label
+                    for="m_efe">Efeito:</label><textarea
+                    id="m_efe">Quando você ou um aliado seria reduzido a 0 ou de menos SD ou PV, você pode usar essa habilidade para o mesmo ficar com 1 de SD ou PV. Na próxima vez, na mesma cena em que o alvo entraria “sob portas da morte”, ele receberá 1 marcador de “sob portas da morte” assim que entrar na mesma. Um alvo só pode ser afetado por essa habilidade uma vez por encontro.</textarea>
+            </div>
+            <p id="modalError" class="form-error" role="alert" aria-live="assertive" hidden></p>
+            <div class="modal-btns">
+                <button type="button" class="btn-cancel" id="modalCancelBtn">Cancelar</button>
+                <button type="button" class="btn-save" id="saveModalBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditingEl = null;
+        let currentModalIsPower = false;
+        let modalReturnFocus = null;
+        let isCreating = false;
+        let hasUnsavedChanges = false;
+        var expanded = false;
+
+        function createUiElement(tagName, options = {}) {
+            const element = document.createElement(tagName);
+            if (options.className) element.className = options.className;
+            if (options.text !== undefined) element.textContent = options.text;
+            if (options.type) element.type = options.type;
+            if (options.value !== undefined) element.value = options.value;
+            if (options.dataset) Object.assign(element.dataset, options.dataset);
+            return element;
+        }
+
+        function createActionButton(className, text, action, dataset = {}) {
+            return createUiElement('button', {
+                className,
+                text,
+                type: 'button',
+                dataset: { action, ...dataset }
+            });
+        }
+
+        function clearModalError() {
+            const error = document.getElementById('modalError');
+            const nameInput = document.getElementById('m_nome');
+            error.textContent = '';
+            error.hidden = true;
+            nameInput?.removeAttribute('aria-invalid');
+        }
+
+        function showModalError(message) {
+            const error = document.getElementById('modalError');
+            const nameInput = document.getElementById('m_nome');
+            error.textContent = message;
+            error.hidden = false;
+            nameInput.setAttribute('aria-invalid', 'true');
+            nameInput.focus();
+        }
+
+        function trapModalFocus(event, modal) {
+            if (event.key !== 'Tab') return;
+            const focusable = Array.from(modal.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'));
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+
+        function markDirty() { hasUnsavedChanges = true; }
+
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.hidden = true;
+            overlay.setAttribute('aria-hidden', 'true');
+            clearModalError();
+            modalReturnFocus?.focus();
+            modalReturnFocus = null;
+        }
+
+        function addSkill() { isCreating = true; openModalForm(false); }
+        function addPower() { isCreating = true; openModalForm(true); }
+
+        function appendModalField(container, labelText, id, tagName = 'input') {
+            const label = createUiElement('label', { text: `${labelText}:` });
+            label.htmlFor = id;
+            const control = createUiElement(tagName, { type: tagName === 'input' ? 'text' : '' });
+            control.id = id;
+            container.append(label, control);
+            return control;
+        }
+
+        function openModalForm(isPower) {
+            const fields = document.getElementById('modalFields');
+            const overlay = document.getElementById('modalOverlay');
+            modalReturnFocus = document.activeElement;
+            currentModalIsPower = isPower;
+            document.getElementById('modalTitle').innerText = isPower ? 'Novo Poder' : 'Nova Habilidade';
+            fields.replaceChildren();
+
+            if (isPower) {
+                appendModalField(fields, 'Nome', 'm_nome');
+                appendModalField(fields, 'Benefício', 'm_ben', 'textarea');
+                appendModalField(fields, 'Especial', 'm_esp', 'textarea');
+            } else {
+                appendModalField(fields, 'Nome', 'm_nome');
+                appendModalField(fields, 'Tipo', 'm_tipo');
+                const grid = document.createElement('div');
+                grid.className = 'grid-modal';
+                [
+                    ['Alcance', 'm_alc'], ['Alvo', 'm_alv'], ['Duração', 'm_dur'],
+                    ['Ação', 'm_aca'], ['Uso', 'm_uso']
+                ].forEach(([label, id]) => {
+                    const wrapper = createUiElement('div');
+                    appendModalField(wrapper, label, id);
+                    grid.appendChild(wrapper);
+                });
+                fields.appendChild(grid);
+                appendModalField(fields, 'Descrição', 'm_desc', 'textarea');
+                appendModalField(fields, 'Efeito', 'm_efe', 'textarea');
+            }
+
+            const nameInput = document.getElementById('m_nome');
+            nameInput.required = true;
+            nameInput.setAttribute('aria-describedby', 'modalError');
+            clearModalError();
+            overlay.hidden = false;
+            overlay.setAttribute('aria-hidden', 'false');
+            nameInput.focus();
+        }
+
+        function editElement(el, isPower) {
+            isCreating = false;
+            currentEditingEl = el;
+            const nomeEl = el.querySelector('.skill-name');
+            const descEl = el.querySelector('.skill-desc');
+            const getVal = (field) => descEl.querySelector(`[data-field="${field}"]`)?.textContent || '';
+
+            openModalForm(isPower);
+            if (isPower) {
+                document.getElementById('modalTitle').innerText = 'Editar Poder';
+                document.getElementById('m_nome').value = nomeEl.innerText;
+                document.getElementById('m_ben').value = getVal('benefit');
+                document.getElementById('m_esp').value = getVal('special');
+            } else {
+                const tipoEl = el.querySelector('.skill-type-label');
+                document.getElementById('m_nome').value = nomeEl.innerText;
+                document.getElementById('m_tipo').value = tipoEl.innerText;
+                [
+                    ['m_alc', 'range'], ['m_alv', 'target'], ['m_dur', 'duration'],
+                    ['m_aca', 'action'], ['m_uso', 'use'], ['m_desc', 'description'], ['m_efe', 'effect']
+                ].forEach(([id, field]) => { document.getElementById(id).value = getVal(field); });
+            }
+        }
+
+        function appendDescriptionField(container, label, field, value, addBreak = false) {
+            const strong = createUiElement('b', { text: `${label}:` });
+            const fieldValue = createUiElement('span', { className: 'skill-field-value', text: value });
+            fieldValue.dataset.field = field;
+            container.append(strong, document.createTextNode(' '), fieldValue, document.createTextNode(' '));
+            if (addBreak) container.appendChild(document.createElement('br'));
+        }
+
+        function renderDescription(container, isPower, values) {
+            container.replaceChildren();
+            if (isPower) {
+                appendDescriptionField(container, 'Benefício', 'benefit', values.benefit, true);
+                appendDescriptionField(container, 'Especial', 'special', values.special);
+                return;
+            }
+
+            appendDescriptionField(container, 'Alcance', 'range', values.range);
+            appendDescriptionField(container, 'Alvo', 'target', values.target);
+            appendDescriptionField(container, 'Duração', 'duration', values.duration);
+            appendDescriptionField(container, 'Ação', 'action', values.action);
+            appendDescriptionField(container, 'Uso', 'use', values.use, true);
+            appendDescriptionField(container, 'Descrição', 'description', values.description, true);
+            appendDescriptionField(container, 'Efeito', 'effect', values.effect);
+        }
+
+        function createSkillItem(isPower, values) {
+            const item = createUiElement('div', { className: 'skill-item' });
+            const name = createUiElement('span', { className: 'skill-name', text: values.name });
+            const actions = createUiElement('div', { className: 'skill-actions' });
+
+            if (!isPower) {
+                const type = createUiElement('span', { className: 'skill-type-label', text: values.type });
+                actions.appendChild(type);
+            }
+
+            const editButton = createActionButton('btn-edit', '✏️', 'edit-skill', { isPower: String(isPower) });
+            const deleteButton = createActionButton('btn-delete', 'X', 'delete-skill');
+            actions.append(editButton, deleteButton);
+            const description = createUiElement('div', { className: 'skill-desc' });
+            renderDescription(description, isPower, values);
+            item.append(name, actions, description);
+            updateSkillActionLabels(item, isPower, values.name);
+            return item;
+        }
+
+        function updateSkillActionLabels(item, isPower, name) {
+            const itemType = isPower ? 'poder' : 'habilidade';
+            const accessibleName = name.trim() || 'sem nome';
+            const editButton = item.querySelector('[data-action="edit-skill"]');
+            const deleteButton = item.querySelector('[data-action="delete-skill"]');
+            editButton.setAttribute('aria-label', `Editar ${itemType} ${accessibleName}`);
+            editButton.title = `Editar ${itemType}`;
+            deleteButton.setAttribute('aria-label', `Excluir ${itemType} ${accessibleName}`);
+            deleteButton.title = `Excluir ${itemType}`;
+        }
+
+        function saveFromModal(isPower) {
+            const v = (id) => document.getElementById(id).value;
+            const nameInput = document.getElementById('m_nome');
+            if (!nameInput.value.trim()) {
+                showModalError(isPower ? 'Informe o nome do poder.' : 'Informe o nome da habilidade.');
+                return;
+            }
+            clearModalError();
+            const values = isPower ? {
+                name: v('m_nome').trim(), benefit: v('m_ben'), special: v('m_esp')
+            } : {
+                name: v('m_nome').trim(), type: v('m_tipo'), range: v('m_alc'), target: v('m_alv'),
+                duration: v('m_dur'), action: v('m_aca'), use: v('m_uso'),
+                description: v('m_desc'), effect: v('m_efe')
+            };
+
+            if (isCreating) {
+                const container = isPower ? document.getElementById('powersContainer') : document.getElementById('skillsContainer');
+                container.appendChild(createSkillItem(isPower, values));
+            } else {
+                const nomeEl = currentEditingEl.querySelector('.skill-name');
+                if (nomeEl) nomeEl.textContent = values.name;
+
+                const desc = currentEditingEl.querySelector('.skill-desc');
+                if (!isPower) {
+                    const tipoEl = currentEditingEl.querySelector('.skill-type-label');
+                    if (tipoEl) tipoEl.textContent = values.type;
+                }
+                if (desc) renderDescription(desc, isPower, values);
+                updateSkillActionLabels(currentEditingEl, isPower, values.name);
+            }
+
+            markDirty();
+            closeModal();
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            const overlay = document.getElementById('modalOverlay');
+            if (overlay.hidden) return;
+            if (e.key === 'Escape') {
+                closeModal();
+                return;
+            }
+            trapModalFocus(e, overlay.querySelector('.modal-box'));
+        });
+
+        document.getElementById('modalFields').addEventListener('input', function (e) {
+            if (e.target.id === 'm_nome' && e.target.value.trim()) clearModalError();
+        });
+
+        function addInventoryRow() {
+            const tr = createUiElement('tr', { className: 'inventory-row' });
+            for (let index = 0; index < 3; index++) {
+                const cell = createUiElement('td', { className: 'inventory-cell' });
+                const input = createUiElement('input', {
+                    className: `inventory-input${index === 2 ? ' inventory-input-wide' : ''}`,
+                    type: 'text'
+                });
+                cell.appendChild(input);
+                tr.appendChild(cell);
+            }
+            document.getElementById('inventoryBody').appendChild(tr);
+            markDirty();
+        }
+
+        function copyFormState(source, target) {
+            const sourceFields = source.querySelectorAll('input, textarea, select');
+            const targetFields = target.querySelectorAll('input, textarea, select');
+
+            sourceFields.forEach((field, index) => {
+                const targetField = targetFields[index];
+                if (field.matches('textarea')) {
+                    targetField.textContent = field.value;
+                    return;
+                }
+                if (field.matches('select')) {
+                    Array.from(field.options).forEach((option, optionIndex) => {
+                        targetField.options[optionIndex].toggleAttribute('selected', option.selected);
+                    });
+                    return;
+                }
+
+                targetField.setAttribute('value', field.value);
+                if (field.matches('[type="checkbox"], [type="radio"]')) {
+                    targetField.toggleAttribute('checked', field.checked);
+                }
+            });
+        }
+
+        function serializeCurrentSheet() {
+            const documentClone = document.documentElement.cloneNode(true);
+            copyFormState(document, documentClone);
+            return '<!DOCTYPE html>\n' + documentClone.outerHTML;
+        }
+
+        function sanitizeFilename(value, fallback) {
+            const sanitized = String(value || '')
+                .trim()
+                .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
+                .replace(/\s+/g, '_')
+                .replace(/[. ]+$/g, '')
+                .slice(0, 80);
+            return sanitized || fallback;
+        }
+
+        function downloadCurrentSheet(filename) {
+            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = createUiElement('a');
+            link.href = url;
+            link.download = filename;
+            link.hidden = true;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+        }
+
+        function saveFile() {
+            const nome = sanitizeFilename(document.getElementById('charName').value, 'Ficha_Digimon');
+            const data = new Date().toLocaleDateString().replace(/\//g, '-');
+            downloadCurrentSheet(`DRPG_${nome}_${data}.html`);
+            hasUnsavedChanges = false;
+        }
+
+        function showCheckboxes() {
+            var checkboxes = document.getElementById('checkboxes');
+            const trigger = document.getElementById('conditionSelectTrigger');
+            if (!expanded) {
+                checkboxes.style.display = 'block';
+                expanded = true;
+            } else {
+                checkboxes.style.display = 'none';
+                expanded = false;
+            }
+            trigger.setAttribute('aria-expanded', String(expanded));
+        }
+
+        function updateSelected() {
+            const checkboxes = document.querySelectorAll('#checkboxes input[type=checkbox]:checked');
+            const display = document.getElementById('displayValue');
+            let selected = Array.from(checkboxes).map(cb => cb.value);
+
+            if (selected.length > 0) {
+                display.innerText = selected.join(', ');
+            } else {
+                display.innerText = 'Selecionar Condições...';
+            }
+            markDirty();
+        }
+
+        document.addEventListener('input', function (e) {
+            if (e.target.matches('input, textarea')) {
+                markDirty();
+            }
+        });
+
+        document.addEventListener('change', function (e) {
+            if (e.target.matches('input, textarea, select')) {
+                markDirty();
+            }
+        });
+
+        document.getElementById('conditionSelectTrigger').addEventListener('click', showCheckboxes);
+        document.getElementById('checkboxes').addEventListener('change', function (e) {
+            if (e.target.matches('input[type="checkbox"]')) updateSelected();
+        });
+        document.getElementById('addInventoryRowBtn').addEventListener('click', addInventoryRow);
+        document.getElementById('addSkillBtn').addEventListener('click', addSkill);
+        document.getElementById('addPowerBtn').addEventListener('click', addPower);
+        document.getElementById('btnSalvar').addEventListener('click', saveFile);
+        document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+        document.getElementById('saveModalBtn').addEventListener('click', function () {
+            saveFromModal(currentModalIsPower);
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            const actionButton = e.target.closest('[data-action]');
+            if (actionButton?.dataset.action === 'edit-skill') {
+                editElement(actionButton.closest('.skill-item'), actionButton.dataset.isPower === 'true');
+                return;
+            }
+            if (actionButton?.dataset.action === 'delete-skill') {
+                actionButton.closest('.skill-item').remove();
+                markDirty();
+                return;
+            }
+
+            const menu = document.querySelector('.multiselect');
+            if (!menu.contains(e.target)) {
+                document.getElementById('checkboxes').style.display = 'none';
+                expanded = false;
+                document.getElementById('conditionSelectTrigger').setAttribute('aria-expanded', 'false');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
+

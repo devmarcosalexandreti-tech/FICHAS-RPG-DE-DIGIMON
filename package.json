@@ -1,0 +1,20 @@
+{
+  "name": "fichas-html-asafe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "npm run validate:source && npm run validate:html && npm run validate:css",
+    "validate:source": "node scripts/validate-source.mjs",
+    "validate:html": "html-validate DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
+    "validate:css": "stylelint DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
+    "test:e2e": "playwright test",
+    "test": "npm run validate && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "html-validate": "^11.16.0",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^17.15.0"
+  }
+}
