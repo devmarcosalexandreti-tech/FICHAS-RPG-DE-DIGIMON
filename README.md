@@ -45,4 +45,21 @@ CSS e JavaScript permanecem embutidos intencionalmente. Separá-los em `shared.c
 
 As rotinas repetidas dentro de cada arquivo foram consolidadas em helpers para criação de elementos, serialização do formulário, sanitização de nomes e download.
 
+### Avaliação de CSS/JS compartilhado
+
+| Alternativa | Vantagem | Limitação | Decisão |
+| --- | --- | --- | --- |
+| `shared.css` e `shared.js` externos | Uma única fonte para estilos e helpers comuns | O HTML baixado deixa de funcionar sozinho quando movido | Não adotar no modelo atual |
+| Duplicação controlada nos HTMLs | Preserva o arquivo único e o uso offline | Mudanças comuns precisam ser replicadas e testadas | Modelo atual |
+| Fontes compartilhadas com etapa de build | Centraliza manutenção e gera HTMLs finais autocontidos | Introduz processo de build e artefatos gerados | Reavaliar se o projeto crescer |
+
+A extração passa a ser recomendada quando houver três ou mais fichas, publicação hospedada ou volume relevante de mudanças comuns. Nesse cenário, CSS e JavaScript devem existir como fontes compartilhadas, enquanto o build deve incorporá-los aos HTMLs distribuídos.
+
+## Convenções de manutenção
+
+- Eventos devem ser registrados com `addEventListener`; handlers inline e propriedades como `.onclick` são rejeitados pelo validador.
+- Elementos dinâmicos devem usar classes ou atributos `data-*` estáveis.
+- Seletores não devem depender de estilos inline nem de cadeias como `parentElement.parentElement`.
+- Novos campos persistentes devem ser cobertos pelo fluxo de salvar e reabrir no Playwright.
+
 Os testes usam o canal `msedge` do Playwright para aproveitar o Microsoft Edge instalado no Windows. Em ambientes sem Edge, remova `channel: "msedge"` de `playwright.config.js` e execute `npx playwright install chromium`.

@@ -7,7 +7,10 @@ const files = [
 
 const forbiddenPatterns = [
   [/\son(?:click|change|input|submit)=/i, "handler inline"],
+  [/\.(?:onclick|onchange|oninput|onsubmit)\s*=/, "handler atribuído por propriedade"],
   [/\.innerHTML\s*=/, "atribuição a innerHTML"],
+  [/querySelector(?:All)?\([^)]*style\*=/, "seletor dependente de estilo"],
+  [/parentElement\s*\.\s*parentElement/, "seletor dependente de posição"],
   [/normalizeBrokenText|fixMojibakeInDOM/, "reparo de mojibake em runtime"],
   [/ðŸ|�|Ãƒ|Ã§|Ã£|Ã©|Ãª|Ã³|Ãµ/, "texto com possível mojibake"]
 ];
