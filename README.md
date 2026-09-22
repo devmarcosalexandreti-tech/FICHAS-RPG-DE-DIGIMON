@@ -6,8 +6,11 @@ Fichas autocontidas de Digimon e Domador para preenchimento no navegador. Cada a
 
 - `DRPG_Ficha_Digimon_v1.5.html`: ficha de Digimon.
 - `DRPG_Ficha_Domador_v1.4.html`: ficha de Domador.
+- `src/`: fontes organizadas usadas para gerar as fichas.
+- `scripts/build.mjs`: incorpora componentes, estilos e scripts nos HTMLs finais.
 - `REGRESSION_CHECKLIST.md`: roteiro de validação manual.
 - `tests/sheets.spec.js`: testes dos fluxos críticos com Playwright.
+- `tests/visual.spec.js`: comparação visual das duas fichas.
 
 ## Uso
 
@@ -30,30 +33,48 @@ Pré-requisitos: Node.js 20 ou superior e npm.
 
 ```powershell
 npm ci
+npm run build
 npm test
 ```
 
 Comandos disponíveis:
 
-- `npm run validate`: valida JavaScript embutido, marcação HTML e CSS.
+- `npm run build`: gera os dois HTMLs autocontidos a partir de `src/`.
+- `npm run build:check`: verifica se os HTMLs gerados estão atualizados.
+- `npm run validate`: verifica o build e valida JavaScript, marcação HTML e CSS.
 - `npm run test:e2e`: executa os fluxos Playwright.
-- `npm test`: executa todas as validações e testes.
+- `npm test`: gera os artefatos e executa todas as validações e testes.
+
+Os HTMLs da raiz são artefatos de distribuição. Alterações devem ser feitas em `src/` e materializadas com `npm run build`.
+
+## Estrutura de fontes
+
+```text
+src/
+  components/digimon/   inventário e modal
+  components/domador/   atributos sociais, inventário e modal
+  scripts/              lógica específica e helpers compartilhados
+  styles/               estilos específicos e ponto de extensão compartilhado
+  templates/            estrutura principal de cada ficha
+```
+
+O projeto é uma aplicação estática sem React, API, navegação ou sistema de tipos. Por isso, diretórios vazios de hooks, services e types não foram criados. A separação segue as responsabilidades que existem de fato no código.
 
 ## Decisão de arquitetura
 
-CSS e JavaScript permanecem embutidos intencionalmente. Separá-los em `shared.css` e `shared.js` reduziria duplicação entre as duas fichas, mas faria o arquivo baixado depender de recursos externos e perderia a portabilidade que define o projeto.
+HTML, CSS e JavaScript são mantidos em fontes separadas durante o desenvolvimento. O build incorpora tudo nos dois HTMLs finais, preservando o uso offline, o download e a reabertura sem arquivos auxiliares.
 
-As rotinas repetidas dentro de cada arquivo foram consolidadas em helpers para criação de elementos, serialização do formulário, sanitização de nomes e download.
+Helpers sem estado para criação de elementos, contenção de foco, serialização segura, sanitização de nomes e download ficam em `src/scripts/shared.js`. Regras e estado de cada ficha permanecem nos scripts específicos.
 
 ### Avaliação de CSS/JS compartilhado
 
 | Alternativa | Vantagem | Limitação | Decisão |
 | --- | --- | --- | --- |
-| `shared.css` e `shared.js` externos | Uma única fonte para estilos e helpers comuns | O HTML baixado deixa de funcionar sozinho quando movido | Não adotar no modelo atual |
-| Duplicação controlada nos HTMLs | Preserva o arquivo único e o uso offline | Mudanças comuns precisam ser replicadas e testadas | Modelo atual |
-| Fontes compartilhadas com etapa de build | Centraliza manutenção e gera HTMLs finais autocontidos | Introduz processo de build e artefatos gerados | Reavaliar se o projeto crescer |
+| `shared.css` e `shared.js` externos | Uma única fonte comum | Quebra a portabilidade quando o HTML é movido | Não usar nos artefatos finais |
+| Duplicação integral nos HTMLs-fonte | Dispensa build | Aumenta custo e risco de manutenção | Substituída |
+| Fontes compartilhadas com etapa de build | Centraliza manutenção e mantém HTMLs autocontidos | Exige gerar artefatos após alterações | Adotada |
 
-A extração passa a ser recomendada quando houver três ou mais fichas, publicação hospedada ou volume relevante de mudanças comuns. Nesse cenário, CSS e JavaScript devem existir como fontes compartilhadas, enquanto o build deve incorporá-los aos HTMLs distribuídos.
+O CSS visual continua específico por ficha. Regras parecidas possuem diferenças de valores e posição na cascata; movê-las agora criaria risco de regressão visual sem eliminar duplicação equivalente. `src/styles/shared.css` fica reservado para regras cuja equivalência seja comprovada por testes visuais.
 
 ## Convenções de manutenção
 
@@ -61,5 +82,7 @@ A extração passa a ser recomendada quando houver três ou mais fichas, publica
 - Elementos dinâmicos devem usar classes ou atributos `data-*` estáveis.
 - Seletores não devem depender de estilos inline nem de cadeias como `parentElement.parentElement`.
 - Novos campos persistentes devem ser cobertos pelo fluxo de salvar e reabrir no Playwright.
+- Componentes compartilhados só devem conter comportamento idêntico nas duas fichas.
+- Os HTMLs gerados não devem ser editados manualmente.
 
 Os testes usam o canal `msedge` do Playwright para aproveitar o Microsoft Edge instalado no Windows. Em ambientes sem Edge, remova `channel: "msedge"` de `playwright.config.js` e execute `npx playwright install chromium`.

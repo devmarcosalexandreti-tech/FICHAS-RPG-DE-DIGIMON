@@ -2,6 +2,11 @@
 
 Execute este roteiro nos dois arquivos após alterações de HTML, CSS ou JavaScript.
 
+## Integridade do build
+
+- [ ] `npm run build:check` confirma que os HTMLs da raiz correspondem às fontes em `src/`.
+- [ ] `npm test` conclui validações, fluxos funcionais e comparações visuais.
+
 ## Carregamento e apresentação
 
 - [ ] A ficha abre diretamente pelo arquivo HTML sem mensagens de erro.

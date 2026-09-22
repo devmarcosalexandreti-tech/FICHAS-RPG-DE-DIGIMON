@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>DRPG - Ficha de Digimon</title>
     <style>
+        /* Reserved for rules proven equivalent across both sheets. */
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f0f2f5;
@@ -684,13 +686,6 @@
     </div>
 
     <script>
-        let currentEditingEl = null;
-        let currentModalIsPower = false;
-        let modalReturnFocus = null;
-        let isCreating = false;
-        let hasUnsavedChanges = false;
-        var expanded = false;
-
         function createUiElement(tagName, options = {}) {
             const element = document.createElement(tagName);
             if (options.className) element.className = options.className;
@@ -710,6 +705,81 @@
             });
         }
 
+        function trapFocusWithin(event, modal) {
+            if (event.key !== 'Tab') return;
+            const focusable = Array.from(modal.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'));
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+
+        function copyFormState(source, target) {
+            const sourceFields = source.querySelectorAll('input, textarea, select');
+            const targetFields = target.querySelectorAll('input, textarea, select');
+
+            sourceFields.forEach((field, index) => {
+                const targetField = targetFields[index];
+                if (field.matches('textarea')) {
+                    targetField.textContent = field.value;
+                    return;
+                }
+                if (field.matches('select')) {
+                    Array.from(field.options).forEach((option, optionIndex) => {
+                        targetField.options[optionIndex].toggleAttribute('selected', option.selected);
+                    });
+                    return;
+                }
+
+                targetField.setAttribute('value', field.value);
+                if (field.matches('[type="checkbox"], [type="radio"]')) {
+                    targetField.toggleAttribute('checked', field.checked);
+                }
+            });
+        }
+
+        function serializeCurrentSheet() {
+            const documentClone = document.documentElement.cloneNode(true);
+            copyFormState(document, documentClone);
+            return '<!DOCTYPE html>\n' + documentClone.outerHTML;
+        }
+
+        function sanitizeFilename(value, fallback) {
+            const sanitized = String(value || '')
+                .trim()
+                .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
+                .replace(/\s+/g, '_')
+                .replace(/[. ]+$/g, '')
+                .slice(0, 80);
+            return sanitized || fallback;
+        }
+
+        function downloadCurrentSheet(filename) {
+            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = createUiElement('a');
+            link.href = url;
+            link.download = filename;
+            link.hidden = true;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+        }
+
+        let currentEditingEl = null;
+        let currentModalIsPower = false;
+        let modalReturnFocus = null;
+        let isCreating = false;
+        let hasUnsavedChanges = false;
+        var expanded = false;
+
         function clearModalError() {
             const error = document.getElementById('modalError');
             const nameInput = document.getElementById('m_nome');
@@ -725,21 +795,6 @@
             error.hidden = false;
             nameInput.setAttribute('aria-invalid', 'true');
             nameInput.focus();
-        }
-
-        function trapModalFocus(event, modal) {
-            if (event.key !== 'Tab') return;
-            const focusable = Array.from(modal.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'));
-            if (focusable.length === 0) return;
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
-                event.preventDefault();
-                last.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first.focus();
-            }
         }
 
         function markDirty() { hasUnsavedChanges = true; }
@@ -933,7 +988,7 @@
                 closeModal();
                 return;
             }
-            trapModalFocus(e, overlay.querySelector('.modal-box'));
+            trapFocusWithin(e, overlay.querySelector('.modal-box'));
         });
 
         document.getElementById('modalFields').addEventListener('input', function (e) {
@@ -953,59 +1008,6 @@
             }
             document.getElementById('inventoryBody').appendChild(tr);
             markDirty();
-        }
-
-        function copyFormState(source, target) {
-            const sourceFields = source.querySelectorAll('input, textarea, select');
-            const targetFields = target.querySelectorAll('input, textarea, select');
-
-            sourceFields.forEach((field, index) => {
-                const targetField = targetFields[index];
-                if (field.matches('textarea')) {
-                    targetField.textContent = field.value;
-                    return;
-                }
-                if (field.matches('select')) {
-                    Array.from(field.options).forEach((option, optionIndex) => {
-                        targetField.options[optionIndex].toggleAttribute('selected', option.selected);
-                    });
-                    return;
-                }
-
-                targetField.setAttribute('value', field.value);
-                if (field.matches('[type="checkbox"], [type="radio"]')) {
-                    targetField.toggleAttribute('checked', field.checked);
-                }
-            });
-        }
-
-        function serializeCurrentSheet() {
-            const documentClone = document.documentElement.cloneNode(true);
-            copyFormState(document, documentClone);
-            return '<!DOCTYPE html>\n' + documentClone.outerHTML;
-        }
-
-        function sanitizeFilename(value, fallback) {
-            const sanitized = String(value || '')
-                .trim()
-                .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '_')
-                .replace(/\s+/g, '_')
-                .replace(/[. ]+$/g, '')
-                .slice(0, 80);
-            return sanitized || fallback;
-        }
-
-        function downloadCurrentSheet(filename) {
-            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = createUiElement('a');
-            link.href = url;
-            link.download = filename;
-            link.hidden = true;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 0);
         }
 
         function saveFile() {
@@ -1092,10 +1094,8 @@
                 document.getElementById('conditionSelectTrigger').setAttribute('aria-expanded', 'false');
             }
         });
-
     </script>
 
 </body>
 
 </html>
-

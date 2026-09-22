@@ -1,0 +1,435 @@
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estrutura Contínua */
+        .page {
+            width: 800px;
+            min-height: 1050px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #34495e;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .title-bar {
+            background: #34495e;
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin: 20px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 2fr);
+            gap: 10px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .box {
+            border: 1px solid #dcdde1;
+            padding: 8px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        input {
+            border: none;
+            width: 95%;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2980b9;
+            background: transparent;
+            outline: none;
+        }
+
+        /* Estilo das Habilidades e Poderes */
+        .skill-item {
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .skill-item:hover {
+            background: #f1f4f9;
+            border-color: #3498db;
+        }
+
+        .skill-desc {
+            visibility: hidden;
+            width: 90%;
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            left: 5%;
+            top: 110%;
+            opacity: 0;
+            transition: all 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            border: 1px solid #3498db;
+        }
+
+        .skill-item:hover .skill-desc {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .skill-desc b {
+            color: #3498db;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        /* Botões */
+        #btnSalvar {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            padding: 12px 20px;
+            background-color: #34495e;
+            color: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-add {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            border: none;
+            border-radius: 3px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .btn-edit {
+            background: #FFEE8C;
+            color: #2c3e50;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #f39c12;
+            outline-offset: 2px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+        }
+
+        .skill-actions {
+            display: inline-block;
+            float: right;
+        }
+
+        .skill-type-label {
+            color: #3498db;
+            font-size: 11px;
+            margin-right: 10px;
+        }
+
+        .inventory-row {
+            height: 40px;
+        }
+
+        .inventory-cell {
+            border-bottom: 1px solid #eee;
+        }
+
+        .inventory-input {
+            width: 95%;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .inventory-input-wide {
+            width: 100%;
+            font-weight: normal;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #dcdde1;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fffcf5;
+            margin-top: 5px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .multiselect {
+            width: 100%;
+            position: relative;
+        }
+
+        .selectBox {
+            cursor: pointer;
+            background: #fdfdfd;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            text-align: left;
+            font: inherit;
+        }
+
+        /* Ajuste para o texto parecer um campo da ficha */
+        #displayValue {
+            font-size: 14px;
+            color: #2980b9;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            padding-top: 2px;
+        }
+
+        /* O Menu Dropdown */
+        #checkboxes {
+            display: none;
+            border: 1px solid #dcdde1;
+            background: white;
+            position: absolute;
+            width: 200px;
+            /* Largura fixa para não cobrir a tela toda */
+            right: 0;
+            /* Alinha à direita da box */
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        #checkboxes label {
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            color: #2980b9;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        #checkboxes label:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Títulos das categorias (Mentais, Corporais, etc) */
+        .group-title {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            padding: 4px 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #checkboxes input[type="checkbox"] {
+            margin-right: 10px;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        #modalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalOverlay[hidden] {
+            display: none;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 600px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .modal-box h2 {
+            margin: 0;
+            color: #e67e22;
+            font-size: 18px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-box label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        /* Inputs normais ficam com tamanho baseado no conteúdo ou grid */
+        .modal-box input {
+            border: 1px solid #dcdde1;
+            padding: 6px;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        #modalFields>input,
+        .grid-modal input {
+            width: 100%;
+        }
+
+        /* Textareas (Descrição/Efeito) ocupam a largura toda para facilitar a escrita */
+        .modal-box textarea {
+            border: 1px solid #dcdde1;
+            padding: 6px;
+            border-radius: 4px;
+            background: #f9f9f9;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 50px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal-box [aria-invalid="true"] {
+            border-color: #c0392b;
+            box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.15);
+        }
+
+        .form-error {
+            margin: 2px 0 0;
+            color: #a93226;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-error[hidden] {
+            display: none;
+        }
+
+        .grid-modal {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .modal-btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-btns button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-save {
+            background: #e67e22;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #eee;
+        }

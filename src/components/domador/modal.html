@@ -1,0 +1,25 @@
+    <div id="skillModalOverlay" class="skill-modal-overlay" hidden aria-hidden="true">
+        <div class="skill-modal-box" role="dialog" aria-modal="true" aria-labelledby="skillModalTitle"
+            aria-describedby="skillModalError">
+            <h2 id="skillModalTitle" class="skill-modal-title">Nova Habilidade</h2>
+            <div class="skill-modal-grid">
+                <div>
+                    <label for="s_nome">Nome</label>
+                    <input type="text" id="s_nome" value="" required aria-describedby="skillModalError">
+                </div>
+                <div>
+                    <label for="s_tipo">Tipo</label>
+                    <input type="text" id="s_tipo" value="">
+                </div>
+            </div>
+            <div style="margin-top:10px;">
+                <label for="s_desc">Descrição</label>
+                <textarea id="s_desc" rows="4" style="width:100%; border:1px solid #dcdde1; border-radius:4px; padding:6px; background:#f9f9f9;"></textarea>
+            </div>
+            <p id="skillModalError" class="form-error" role="alert" aria-live="assertive" hidden></p>
+            <div class="skill-modal-actions">
+                <button type="button" id="skillCancelBtn" class="btn-skill-cancel">Cancelar</button>
+                <button type="button" id="skillSaveBtn" class="btn-skill-save">Confirmar</button>
+            </div>
+        </div>
+    </div>

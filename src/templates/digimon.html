@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DRPG - Ficha de Digimon</title>
+    <style>{{STYLES}}</style>
+</head>
+
+<body>
+
+    <div class="page">
+        <h1>DIGIMON RPG</h1>
+
+        <div class="grid-4">
+            <div class="box"><label>Espécie</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label>Nível</label><input type="text" value=""></div>
+            <div class="box"><label>Singularidade</label><input type="text" value=""></div>
+            <div class="box"><label>Campo</label><input type="text" value=""></div>
+            <div class="box"><label>Tamanho</label><input type="text" value=""></div>
+            <div class="box"><label>Deslocamento</label><input type="text" value=""></div>
+            <div class="box"><label>Sentido</label><input type="text" value=""></div>
+        </div>
+
+        <div class="title-bar">ATRIBUTOS</div>
+        <div class="grid-4">
+            <div class="box"><label>Saúde Digital (SD)</label><input type="text" value=""></div>
+            <div class="box"><label>Saúde Temporária</label><input type="text" value=""></div>
+            <div class="box"><label>Energia</label><input type="text" value=""></div>
+            <div class="box"><label>Energia Temporária</label><input type="text" value=""></div>
+            <div class="box"><label>Força</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Agilidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Precisão</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Vitalidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Espírito</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Adaptabilidade</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Lmt. Energia</label><input type="number" min="1" value=""></div>
+            <div class="box"><label>Memória</label>
+                <div style="display: flex; align-items: center; justify-content: space-around; gap: 5px;">
+                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">SALDO</label>
+                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    </div>
+
+                    <span style="color: #2980b9; font-weight: bold; margin-top: 10px;">|</span>
+
+                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
+                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title-bar">COMBATE</div>
+
+        <div class="grid-2">
+            <div class="box" style="margin-bottom: 10px;"><label>Lista de Magias</label><input type="text" value="">
+            </div>
+            <div class="box" style="margin-bottom: 10px;">
+                <label>Condições</label>
+                <div class="multiselect">
+                    <button type="button" class="selectBox" id="conditionSelectTrigger" aria-expanded="false"
+                        aria-controls="checkboxes" aria-haspopup="true">
+                        <span id="displayValue">Selecionar Condições...</span>
+                        <span class="overSelect"></span>
+                    </button>
+
+                    <div id="checkboxes" style="display: none;" role="group" aria-label="Condições do Digimon">
+                        <div class="group-title">MENTAIS</div>
+                        <label><input type="checkbox" value="Abalado"> Abalado</label>
+                        <label><input type="checkbox" value="Encantado"> Encantado</label>
+                        <label><input type="checkbox" value="Em Pânico"> Em Pânico</label>
+                        <label><input type="checkbox" value="Amedrontrado">
+                            Amedrontrado</label>
+                        <label><input type="checkbox" value="Fascinado"> Fascinado</label>
+                        <label><input type="checkbox" value="Enfurecido"> Enfurecido</label>
+                        <label><input type="checkbox" value="Fatigado"> Fatigado</label>
+                        <label><input type="checkbox" value="Frustrado"> Frustrado</label>
+                        <label><input type="checkbox" value="Sonolento"> Sonolento</label>
+                        <label><input type="checkbox" value="Provocado"> Provocado</label>
+
+                        <div class="group-title">NERVOSAS</div>
+                        <label><input type="checkbox" value="Ofuscado"> Ofuscado</label>
+                        <label><input type="checkbox" value="Atordoado"> Atordoado</label>
+                        <label><input type="checkbox" value="Em Choque"> Em Choque</label>
+                        <label><input type="checkbox" value="Lento"> Lento</label>
+                        <label><input type="checkbox" value="Imóvel"> Imóvel</label>
+                        <label><input type="checkbox" value="Enjoado"> Enjoado</label>
+                        <label><input type="checkbox" value="Paralisado"> Paralisado</label>
+
+                        <div class="group-title">CORPORAIS</div>
+                        <label><input type="checkbox" value="Agarrado"> Agarrado</label>
+                        <label><input type="checkbox" value="Contaminado">
+                            Contaminação</label>
+                        <label><input type="checkbox" value="Congelado"> Congelado</label>
+                        <label><input type="checkbox" value="Envenenado"> Veneno</label>
+                        <label><input type="checkbox" value="Derrubado"> Derrubado</label>
+                        <label><input type="checkbox" value="Hidratado"> Hidratado</label>
+                        <label><input type="checkbox" value="Encharcado"> Encharcado</label>
+                        <label><input type="checkbox" value="Abençoado"> Abençoado</label>
+                        <label><input type="checkbox" value="Amaldiçoado">
+                            Amaldiçoado</label>
+                        <label><input type="checkbox" value="Chamuscado"> Chamuscar</label>
+                        <label><input type="checkbox" value="Fortificado">
+                            Fortificar</label>
+                        <label><input type="checkbox" value="Sangrando"> Sangrando</label>
+                        <label><input type="checkbox" value="DOT"> DOT</label>
+
+                        <div class="group-title">ESPECIAIS</div>
+                        <label><input type="checkbox" value="sob_portas_da_morte"> Sob
+                            Portas da Morte</label>
+                        <label><input type="checkbox" value="morto"> Morto</label>
+                        <label><input type="checkbox" value="inconsciente">
+                            Inconsciente</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-2">
+            <div class="box" style="margin-bottom: 10px;"><label>Resistência</label><input type="text" value="">
+            </div>
+            <div class="box" style="margin-bottom: 10px;"><label>Vulnerabilidade</label><input type="text" value="">
+            </div>
+        </div>
+
+        <div class="grid-4">
+            <div class="box"><label>Iniciativa</label><input type="number" value="0"></div>
+            <div class="box"><label>Acerto</label><input type="number" value="0"></div>
+            <div class="box"><label>Esquiva</label><input type="number" value="0"></div>
+            <div class="box"><label>Fortificação</label><input type="number" value="0"></div>
+            <div class="box"><label>Furtividade</label><input type="number" value="0"></div>
+            <div class="box"><label>Manobra</label><input type="number" value="0"></div>
+            <div class="box"><label>BCA</label><input type="number" min="-3" max="3" value="0"></div>
+            <div class="box"><label>BCE</label><input type="number" min="-3" max="3" value="0"></div>
+        </div>
+
+{{COMPONENT_INVENTORY}}
+        <div class="title-bar">
+            HABILIDADES
+            <button type="button" id="addSkillBtn" class="btn-add" aria-label="Adicionar habilidade"
+                title="Adicionar habilidade">+</button>
+        </div>
+        <div id="skillsContainer">
+
+
+
+
+        </div>
+
+        <div class="title-bar">
+            PODERES
+            <button type="button" id="addPowerBtn" class="btn-add" aria-label="Adicionar poder"
+                title="Adicionar poder">+</button>
+        </div>
+        <div id="powersContainer"></div>
+
+        <div class="title-bar">ANOTAÇÕES</div>
+        <textarea class="notes-area" placeholder="Anotações da campanha..."></textarea>
+    </div>
+
+
+
+
+
+    <button type="button" id="btnSalvar"><span aria-hidden="true">💾</span> Baixar Ficha</button>
+
+{{COMPONENT_MODAL}}
+    <script>{{SCRIPTS}}</script>
+
+</body>
+
+</html>
