@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.17",
+    "npm": ">=10"
+  },
+  "packageManager": "npm@11.16.0",
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:check": "node scripts/build.mjs --check",
@@ -10,8 +15,9 @@
     "validate:source": "node scripts/validate-source.mjs",
     "validate:html": "html-validate DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
     "validate:css": "stylelint DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
+    "test:unit": "node unit-tests/build-and-guards.test.mjs",
     "test:e2e": "playwright test",
-    "test": "npm run build && npm run validate && npm run test:e2e"
+    "test": "npm run build && npm run validate && npm run test:unit && npm run test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
