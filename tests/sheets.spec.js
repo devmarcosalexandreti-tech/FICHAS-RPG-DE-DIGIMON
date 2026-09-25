@@ -36,17 +36,28 @@ async function expectAccessibleControls(page) {
   expect(unnamedControls).toEqual([]);
 }
 
+async function expectDigimonInventoryRowContract(row) {
+  await expect(row).toHaveClass(/\binventory-row\b/);
+  await expect(row.locator("td").first()).toHaveClass(/\binventory-cell\b/);
+  await expect(row.locator("input").first()).toHaveClass(/\binventory-input\b/);
+  await expect(row.locator("input").last()).toHaveClass(/\binventory-input-wide\b/);
+}
+
 test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) => {
   await openSheet(page, "DRPG_Ficha_Digimon_v1.5.html");
   await expectAccessibleControls(page);
   await expect(page.getByLabel("Espécie", { exact: true })).toHaveAttribute("id", "charName");
+  await expect(page.getByRole("table", { name: "Inventário" })).toHaveClass("inventory-table");
+  await expectDigimonInventoryRowContract(page.locator("#inventoryBody tr").first());
   await page.locator("#charName").fill("Teste / Digimon");
   await page.locator(".notes-area").fill(injection);
 
   const initialRows = await page.locator("#inventoryBody tr").count();
   await page.locator("#addInventoryRowBtn").click();
   await expect(page.locator("#inventoryBody tr")).toHaveCount(initialRows + 1);
-  const inventoryInputs = page.locator("#inventoryBody tr").last().locator("input");
+  const addedInventoryRow = page.locator("#inventoryBody tr").last();
+  await expectDigimonInventoryRowContract(addedInventoryRow);
+  const inventoryInputs = addedInventoryRow.locator("input");
   await expect(page.getByLabel(`Item do inventário, linha ${initialRows + 1}`)).toBeVisible();
   await inventoryInputs.nth(0).fill("Poção");
   await inventoryInputs.nth(1).fill("Consumível");

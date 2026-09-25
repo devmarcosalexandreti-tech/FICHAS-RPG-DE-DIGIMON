@@ -207,6 +207,28 @@
             margin-right: 10px;
         }
 
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .inventory-heading {
+            text-align: left;
+            font-size: 10px;
+            color: #586466;
+            border-bottom: 2px solid #34495e;
+            padding: 5px;
+        }
+
+        .inventory-column-quarter {
+            width: 25%;
+        }
+
+        .inventory-column-half {
+            width: 50%;
+        }
+
         .inventory-row {
             height: 40px;
         }
