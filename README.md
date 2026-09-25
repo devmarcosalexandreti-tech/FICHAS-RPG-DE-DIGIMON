@@ -9,6 +9,7 @@ Fichas autocontidas de Digimon e Domador para preenchimento no navegador. Cada a
 - `src/`: fontes organizadas usadas para gerar as fichas.
 - `scripts/build.mjs`: incorpora componentes, estilos e scripts nos HTMLs finais.
 - `REGRESSION_CHECKLIST.md`: roteiro de validação manual.
+- `TESTING.md`: estratégia, cobertura e limitações dos testes automatizados.
 - `tests/sheets.spec.js`: testes dos fluxos críticos com Playwright.
 - `tests/visual.spec.js`: comparação visual das duas fichas.
 
@@ -44,6 +45,7 @@ Comandos disponíveis:
 - `npm run build`: gera os dois HTMLs autocontidos a partir de `src/`.
 - `npm run build:check`: verifica se os HTMLs gerados estão atualizados.
 - `npm run validate`: verifica o build e valida JavaScript, marcação HTML e CSS.
+- `npm run test:unit:coverage`: mede a cobertura dos módulos Node exercitados pelos testes unitários.
 - `npm run test:e2e`: executa os fluxos Playwright.
 - `npm test`: gera os artefatos e executa todas as validações e testes.
 
