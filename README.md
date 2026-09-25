@@ -33,6 +33,8 @@ Pré-requisitos: Node.js 20 ou superior e npm.
 
 ```powershell
 npm ci
+npx playwright install chromium
+npm run build:check
 npm run build
 npm test
 ```
@@ -85,4 +87,4 @@ O CSS visual continua específico por ficha. Regras parecidas possuem diferença
 - Componentes compartilhados só devem conter comportamento idêntico nas duas fichas.
 - Os HTMLs gerados não devem ser editados manualmente.
 
-Os testes usam o canal `msedge` do Playwright para aproveitar o Microsoft Edge instalado no Windows. Em ambientes sem Edge, remova `channel: "msedge"` de `playwright.config.js` e execute `npx playwright install chromium`.
+Os testes usam o Chromium gerenciado pelo Playwright, sem depender de um navegador já instalado na máquina. Os snapshots visuais possuem o Windows como plataforma canônica e o workflow de CI executa a mesma suíte em `windows-latest`.
