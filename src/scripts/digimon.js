@@ -28,6 +28,7 @@
         function closeModal() {
             const overlay = document.getElementById('modalOverlay');
             overlay.hidden = true;
+            overlay.setAttribute('inert', '');
             overlay.setAttribute('aria-hidden', 'true');
             clearModalError();
             modalReturnFocus?.focus();
@@ -81,6 +82,7 @@
             nameInput.setAttribute('aria-describedby', 'modalError');
             clearModalError();
             overlay.hidden = false;
+            overlay.removeAttribute('inert');
             overlay.setAttribute('aria-hidden', 'false');
             nameInput.focus();
         }
@@ -222,6 +224,9 @@
         });
 
         function addInventoryRow() {
+            const inventoryBody = document.getElementById('inventoryBody');
+            const rowNumber = inventoryBody.rows.length + 1;
+            const columnLabels = ['Item', 'Tipo', 'Descrição'];
             const tr = createUiElement('tr', { className: 'inventory-row' });
             for (let index = 0; index < 3; index++) {
                 const cell = createUiElement('td', { className: 'inventory-cell' });
@@ -229,10 +234,11 @@
                     className: `inventory-input${index === 2 ? ' inventory-input-wide' : ''}`,
                     type: 'text'
                 });
+                input.setAttribute('aria-label', `${columnLabels[index]} do inventário, linha ${rowNumber}`);
                 cell.appendChild(input);
                 tr.appendChild(cell);
             }
-            document.getElementById('inventoryBody').appendChild(tr);
+            inventoryBody.appendChild(tr);
             markDirty();
         }
 

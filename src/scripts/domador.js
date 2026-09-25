@@ -77,6 +77,7 @@
 
             clearSkillModalError();
             overlay.hidden = false;
+            overlay.removeAttribute('inert');
             overlay.setAttribute('aria-hidden', 'false');
             nome.focus();
         }
@@ -84,6 +85,7 @@
         function closeSkillModal() {
             const overlay = document.getElementById('skillModalOverlay');
             overlay.hidden = true;
+            overlay.setAttribute('inert', '');
             overlay.setAttribute('aria-hidden', 'true');
             clearSkillModalError();
             skillModalReturnFocus?.focus();
@@ -151,10 +153,13 @@
         }
         function addRow() {
             const body = document.getElementById('inventoryBody');
+            const rowNumber = body.rows.length + 1;
+            const columnLabels = ['Item', 'Tipo', 'Descrição'];
             const row = createUiElement('tr');
             for (let index = 0; index < 3; index++) {
                 const cell = createUiElement('td');
                 const input = createUiElement('input', { className: 'inv-input', type: 'text', value: '-' });
+                input.setAttribute('aria-label', `${columnLabels[index]} do inventário, linha ${rowNumber}`);
                 cell.appendChild(input);
                 row.appendChild(cell);
             }

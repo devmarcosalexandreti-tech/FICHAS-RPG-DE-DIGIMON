@@ -13,33 +13,33 @@
         <h1>Ficha do Domador</h1>
 
         <div class="grid-5">
-            <div class="box"><label>Nome</label><input type="text" id="charName" value=""></div>
-            <div class="box"><label>Nível</label><input type="number" value=""></div>
-            <div class="box"><label>PV Máximo</label><input type="number" value=""></div>
-            <div class="box"><label>Deslocamento (Q)</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>P. Aspecto</label><input type="number" value=""></div>
+            <div class="box"><label for="charName">Nome</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label for="tamerLevel">Nível</label><input type="number" id="tamerLevel" value=""></div>
+            <div class="box"><label for="maxHealth">PV Máximo</label><input type="number" id="maxHealth" value=""></div>
+            <div class="box"><label for="tamerMovement">Deslocamento (Q)</label><input type="number" id="tamerMovement" min="1" value=""></div>
+            <div class="box"><label for="aspectPoints">P. Aspecto</label><input type="number" id="aspectPoints" value=""></div>
         </div>
 
         <div class="grid-5" style="margin-top: 10px;">
-            <div class="box"><label>Sexo</label><input type="text" value=""></div>
-            <div class="box"><label>Idade</label><input type="number" value=""></div>
-            <div class="box"><label>Altura (m)</label><input type="number" step="0.1" min="1.0" max="2.5" value="">
+            <div class="box"><label for="sex">Sexo</label><input type="text" id="sex" value=""></div>
+            <div class="box"><label for="age">Idade</label><input type="number" id="age" value=""></div>
+            <div class="box"><label for="height">Altura (m)</label><input type="number" id="height" step="0.1" min="1.0" max="2.5" value="">
             </div>
-            <div class="box"><label>Etnia</label><input type="text" value=""></div>
-            <div class="box"><label>Nacionalidade</label><input type="text" value=""></div>
+            <div class="box"><label for="ethnicity">Etnia</label><input type="text" id="ethnicity" value=""></div>
+            <div class="box"><label for="nationality">Nacionalidade</label><input type="text" id="nationality" value=""></div>
         </div>
 
         <div class="title-bar">CONVICÇÃO &amp; ASPECTOS</div>
-        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #e67e22;">
-            <input type="text" value="Convicção" style="font-size: 14px; color: #d35400;">
-            <textarea rows="2"></textarea>
+        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #a84300;">
+            <input type="text" value="Convicção" aria-label="Nome da convicção" style="font-size: 14px; color: #a84300;">
+            <textarea rows="2" aria-label="Descrição da convicção"></textarea>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="box"><input type="text" value="Aspecto 1"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 2"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 3"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 4"><textarea rows="4">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 1" aria-label="Nome do aspecto 1"><textarea rows="4" aria-label="Descrição do aspecto 1">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 2" aria-label="Nome do aspecto 2"><textarea rows="4" aria-label="Descrição do aspecto 2">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 3" aria-label="Nome do aspecto 3"><textarea rows="4" aria-label="Descrição do aspecto 3">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 4" aria-label="Nome do aspecto 4"><textarea rows="4" aria-label="Descrição do aspecto 4">Descrição</textarea></div>
         </div>
 
 {{COMPONENT_SOCIAL_ATTRIBUTES}}
@@ -60,19 +60,19 @@
 {{COMPONENT_INVENTORY}}
         <div class="title-bar">TRABALHO</div>
         <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px;">
-            <div class="box"><label>Ocupação</label><input type="text" value=""></div>
-            <div class="box"><label>Ganho Semanal (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Horário</label><input type="text" value=""></div>
+            <div class="box"><label for="occupation">Ocupação</label><input type="text" id="occupation" value=""></div>
+            <div class="box"><label for="weeklyIncome">Ganho Semanal (PR)</label><input type="number" id="weeklyIncome" step="0.25" value=""></div>
+            <div class="box"><label for="workSchedule">Horário</label><input type="text" id="workSchedule" value=""></div>
         </div>
         <div class="grid-4" style="gap: 12px; margin-bottom: 20px;">
-            <div class="box"><label>Saldo (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Custo Semanal (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Atributo</label><input type="text" value=""></div>
-            <div class="box"><label>Bônus</label><input type="text" value=""></div>
+            <div class="box"><label for="balance">Saldo (PR)</label><input type="number" id="balance" step="0.25" value=""></div>
+            <div class="box"><label for="weeklyCost">Custo Semanal (PR)</label><input type="number" id="weeklyCost" step="0.25" value=""></div>
+            <div class="box"><label for="workAttribute">Atributo</label><input type="text" id="workAttribute" value=""></div>
+            <div class="box"><label for="workBonus">Bônus</label><input type="text" id="workBonus" value=""></div>
         </div>
 
-        <div class="title-bar">ANOTAÇÕES</div>
-        <textarea class="notes-area" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
+        <div class="title-bar" id="notesTitle">ANOTAÇÕES</div>
+        <textarea class="notes-area" aria-labelledby="notesTitle" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
     </div>
 {{COMPONENT_MODAL}}
 <button type="button" id="btnSalvar"><span aria-hidden="true">💾</span> Baixar Ficha</button>

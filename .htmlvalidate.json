@@ -7,7 +7,7 @@
     "doctype-style": "off",
     "form-dup-name": "off",
     "heading-level": "off",
-    "hidden-focusable": "off",
+    "hidden-focusable": "error",
     "input-attributes": "off",
     "long-title": "off",
     "no-inline-style": "off",
@@ -16,11 +16,11 @@
     "prefer-native-element": "off",
     "require-sri": "off",
     "text-content": "off",
-    "wcag/h30": "off",
-    "wcag/h32": "off",
-    "wcag/h36": "off",
-    "wcag/h37": "off",
-    "wcag/h63": "off",
-    "wcag/h67": "off"
+    "wcag/h30": "error",
+    "wcag/h32": "error",
+    "wcag/h36": "error",
+    "wcag/h37": "error",
+    "wcag/h63": "error",
+    "wcag/h67": "error"
   }
 }

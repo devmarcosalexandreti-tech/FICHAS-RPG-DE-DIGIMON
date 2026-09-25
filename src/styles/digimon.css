@@ -66,10 +66,11 @@
             position: relative;
         }
 
-        label {
+        label,
+        .field-label {
             font-size: 10px;
             font-weight: bold;
-            color: #7f8c8d;
+            color: #586466;
             display: block;
             text-transform: uppercase;
             margin-bottom: 3px;
@@ -80,7 +81,7 @@
             width: 95%;
             font-size: 14px;
             font-weight: bold;
-            color: #2980b9;
+            color: #24658f;
             background: transparent;
             outline: none;
         }
@@ -256,7 +257,7 @@
         /* Ajuste para o texto parecer um campo da ficha */
         #displayValue {
             font-size: 14px;
-            color: #2980b9;
+            color: #24658f;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -288,7 +289,7 @@
             padding: 6px 10px;
             font-size: 12px;
             cursor: pointer;
-            color: #2980b9;
+            color: #24658f;
             border-bottom: 1px solid #eee;
             white-space: nowrap;
         }
@@ -347,7 +348,7 @@
 
         .modal-box h2 {
             margin: 0;
-            color: #e67e22;
+            color: #a84300;
             font-size: 18px;
             text-transform: uppercase;
             border-bottom: 2px solid #eee;
@@ -356,7 +357,7 @@
         .modal-box label {
             font-size: 10px;
             font-weight: bold;
-            color: #7f8c8d;
+            color: #586466;
             text-transform: uppercase;
         }
 
@@ -426,7 +427,7 @@
         }
 
         .btn-save {
-            background: #e67e22;
+            background: #a84300;
             color: white;
         }
 

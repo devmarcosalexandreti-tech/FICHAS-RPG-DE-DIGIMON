@@ -20,8 +20,26 @@ async function saveAndReopen(page, testInfo, outputFilename) {
   return download.suggestedFilename();
 }
 
+async function expectAccessibleControls(page) {
+  const unnamedControls = await page.locator("input, textarea, select").evaluateAll((controls) => controls
+    .filter((control) => {
+      const nativeLabel = Array.from(control.labels || []).some((label) => label.textContent.trim());
+      const ariaLabel = control.getAttribute("aria-label")?.trim();
+      const labelledBy = (control.getAttribute("aria-labelledby") || "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .some((id) => document.getElementById(id)?.textContent.trim());
+      return !nativeLabel && !ariaLabel && !labelledBy;
+    })
+    .map((control) => control.outerHTML));
+
+  expect(unnamedControls).toEqual([]);
+}
+
 test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) => {
   await openSheet(page, "DRPG_Ficha_Digimon_v1.5.html");
+  await expectAccessibleControls(page);
+  await expect(page.getByLabel("Espécie", { exact: true })).toHaveAttribute("id", "charName");
   await page.locator("#charName").fill("Teste / Digimon");
   await page.locator(".notes-area").fill(injection);
 
@@ -29,6 +47,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await page.locator("#addInventoryRowBtn").click();
   await expect(page.locator("#inventoryBody tr")).toHaveCount(initialRows + 1);
   const inventoryInputs = page.locator("#inventoryBody tr").last().locator("input");
+  await expect(page.getByLabel(`Item do inventário, linha ${initialRows + 1}`)).toBeVisible();
   await inventoryInputs.nth(0).fill("Poção");
   await inventoryInputs.nth(1).fill("Consumível");
   await inventoryInputs.nth(2).fill(injection);
@@ -45,10 +64,13 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
 
   await page.locator("#addSkillBtn").click();
   await expect(page.locator("#modalOverlay")).toHaveAttribute("aria-hidden", "false");
+  await expect(page.locator("#modalOverlay")).not.toHaveAttribute("inert", "");
   await expect(page.locator("#m_nome")).toBeFocused();
-  await page.locator("#saveModalBtn").focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(page.locator("#saveModalBtn")).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.locator("#m_nome")).toBeFocused();
+  await expectAccessibleControls(page);
   await page.locator("#saveModalBtn").click();
   await expect(page.locator("#modalError")).toHaveText("Informe o nome da habilidade.");
   await expect(page.locator("#m_nome")).toHaveAttribute("aria-invalid", "true");
@@ -70,6 +92,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(skill.locator(".skill-name")).toHaveText(injection);
   await expect(skill.locator('[data-action="edit-skill"]')).toHaveAttribute("aria-label", /Editar habilidade/);
   await expect(page.locator("#modalOverlay")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("#modalOverlay")).toHaveAttribute("inert", "");
   await expect(page.locator("#addSkillBtn")).toBeFocused();
   await skill.locator('[data-action="edit-skill"]').click();
   await page.locator("#m_tipo").fill("Ataque editado");
@@ -90,6 +113,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   const filename = await saveAndReopen(page, testInfo, "digimon-first-save.html");
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Digimon");
+  await expectAccessibleControls(page);
   await expect(page.locator(".notes-area")).toHaveValue(injection);
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Poção");
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);
@@ -117,6 +141,8 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
 
 test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) => {
   await openSheet(page, "DRPG_Ficha_Domador_v1.4.html");
+  await expectAccessibleControls(page);
+  await expect(page.getByLabel("Coragem", { exact: true })).toHaveAttribute("id", "pts-Coragem");
   await page.locator("#charName").fill("Teste / Domador");
   await page.locator(".notes-area").fill(injection);
 
@@ -144,6 +170,7 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await page.locator("#addInventoryRowBtn").click();
   await expect(page.locator("#inventoryBody tr")).toHaveCount(initialRows + 1);
   const inventoryInputs = page.locator("#inventoryBody tr").last().locator("input");
+  await expect(page.getByLabel(`Item do inventário, linha ${initialRows + 1}`)).toBeVisible();
   await inventoryInputs.nth(0).fill("Notebook");
   await inventoryInputs.nth(1).fill("Equipamento");
   await inventoryInputs.nth(2).fill(injection);
@@ -160,10 +187,13 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
 
   await page.locator("#addSkillBtn").click();
   await expect(page.locator("#skillModalOverlay")).toHaveAttribute("aria-hidden", "false");
+  await expect(page.locator("#skillModalOverlay")).not.toHaveAttribute("inert", "");
   await expect(page.locator("#s_nome")).toBeFocused();
-  await page.locator("#skillSaveBtn").focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(page.locator("#skillSaveBtn")).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.locator("#s_nome")).toBeFocused();
+  await expectAccessibleControls(page);
   await page.locator("#skillSaveBtn").click();
   await expect(page.locator("#skillModalError")).toHaveText("Informe o nome da habilidade.");
   await expect(page.locator("#s_nome")).toHaveAttribute("aria-invalid", "true");
@@ -178,6 +208,7 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(skill).toHaveCount(1);
   await expect(skill.locator('[data-action="edit-skill"]')).toHaveAttribute("aria-label", /Editar habilidade/);
   await expect(page.locator("#skillModalOverlay")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("#skillModalOverlay")).toHaveAttribute("inert", "");
   await expect(page.locator("#addSkillBtn")).toBeFocused();
   await skill.locator('[data-action="edit-skill"]').click();
   await page.locator("#s_tipo").fill("Social editada");
@@ -187,6 +218,7 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   const filename = await saveAndReopen(page, testInfo, "domador-first-save.html");
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Domador");
+  await expectAccessibleControls(page);
   await expect(page.locator(".notes-area")).toHaveValue(injection);
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Notebook");
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);

@@ -29,14 +29,14 @@
         h1 {
             text-align: center;
             color: #2c3e50;
-            border-bottom: 3px solid #e67e22;
+            border-bottom: 3px solid #a84300;
             padding-bottom: 10px;
             text-transform: uppercase;
             margin-top: 0;
         }
 
         .title-bar {
-            background: #e67e22;
+            background: #a84300;
             color: white;
             padding: 8px 15px;
             font-weight: bold;
@@ -86,7 +86,7 @@
         label {
             font-size: 10px;
             font-weight: bold;
-            color: #7f8c8d;
+            color: #586466;
             display: block;
             text-transform: uppercase;
             margin-bottom: 3px;
@@ -105,7 +105,7 @@
 
         input {
             font-weight: bold;
-            color: #d35400;
+            color: #a84300;
             font-size: 14px;
         }
 
@@ -129,7 +129,7 @@
         }
 
         .tier-badge {
-            background: #e67e22;
+            background: #a84300;
             color: white;
             padding: 1px 6px;
             border-radius: 8px;
@@ -139,7 +139,7 @@
         }
 
         .title-display {
-            color: #d35400;
+            color: #a84300;
             font-weight: bold;
             font-size: 13px;
             min-height: 18px;
@@ -164,7 +164,7 @@
 
         .skill-item:hover {
             background: #fff5eb;
-            border-color: #e67e22;
+            border-color: #a84300;
         }
 
         .skill-desc {
@@ -182,7 +182,7 @@
             transition: all 0.3s;
             font-size: 12px;
             line-height: 1.4;
-            border: 1px solid #e67e22;
+            border: 1px solid #a84300;
             pointer-events: none;
         }
 
@@ -194,7 +194,7 @@
 
         .btn-add {
             background: white;
-            color: #e67e22;
+            color: #a84300;
             border: none;
             border-radius: 4px;
             padding: 2px 8px;
@@ -225,7 +225,7 @@
         button:focus-visible,
         input:focus-visible,
         textarea:focus-visible {
-            outline: 3px solid #2980b9;
+            outline: 3px solid #24658f;
             outline-offset: 2px;
         }
 
@@ -234,7 +234,7 @@
         }
 
         .skill-type-label {
-            color: #e67e22;
+            color: #a84300;
             font-size: 11px;
             margin-right: 10px;
         }
@@ -256,14 +256,14 @@
             width: min(560px, 92vw);
             background: #fff;
             border-radius: 8px;
-            border: 2px solid #e67e22;
+            border: 2px solid #a84300;
             box-shadow: 0 8px 24px rgba(0,0,0,0.25);
             padding: 18px;
             box-sizing: border-box;
         }
         .skill-modal-title {
             margin: 0 0 10px 0;
-            color: #d35400;
+            color: #a84300;
             font-size: 16px;
             text-transform: uppercase;
         }
@@ -286,7 +286,7 @@
             cursor: pointer;
             font-weight: bold;
         }
-        .btn-skill-save { background: #e67e22; color: #fff; }
+        .btn-skill-save { background: #a84300; color: #fff; }
         .btn-skill-cancel { background: #eee; color: #2c3e50; }
 
         .skill-modal-box [aria-invalid="true"] {
@@ -315,8 +315,8 @@
         th {
             text-align: left;
             font-size: 10px;
-            color: #7f8c8d;
-            border-bottom: 2px solid #e67e22;
+            color: #586466;
+            border-bottom: 2px solid #a84300;
             padding: 5px;
             text-transform: uppercase;
         }
@@ -338,9 +338,9 @@
             right: 30px;
             z-index: 9999;
             padding: 12px 20px;
-            background-color: #e67e22;
+            background-color: #a84300;
             color: white;
-            border: 2px solid #d35400;
+            border: 2px solid #a84300;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
@@ -355,69 +355,69 @@
         <h1>Ficha do Domador</h1>
 
         <div class="grid-5">
-            <div class="box"><label>Nome</label><input type="text" id="charName" value=""></div>
-            <div class="box"><label>Nível</label><input type="number" value=""></div>
-            <div class="box"><label>PV Máximo</label><input type="number" value=""></div>
-            <div class="box"><label>Deslocamento (Q)</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>P. Aspecto</label><input type="number" value=""></div>
+            <div class="box"><label for="charName">Nome</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label for="tamerLevel">Nível</label><input type="number" id="tamerLevel" value=""></div>
+            <div class="box"><label for="maxHealth">PV Máximo</label><input type="number" id="maxHealth" value=""></div>
+            <div class="box"><label for="tamerMovement">Deslocamento (Q)</label><input type="number" id="tamerMovement" min="1" value=""></div>
+            <div class="box"><label for="aspectPoints">P. Aspecto</label><input type="number" id="aspectPoints" value=""></div>
         </div>
 
         <div class="grid-5" style="margin-top: 10px;">
-            <div class="box"><label>Sexo</label><input type="text" value=""></div>
-            <div class="box"><label>Idade</label><input type="number" value=""></div>
-            <div class="box"><label>Altura (m)</label><input type="number" step="0.1" min="1.0" max="2.5" value="">
+            <div class="box"><label for="sex">Sexo</label><input type="text" id="sex" value=""></div>
+            <div class="box"><label for="age">Idade</label><input type="number" id="age" value=""></div>
+            <div class="box"><label for="height">Altura (m)</label><input type="number" id="height" step="0.1" min="1.0" max="2.5" value="">
             </div>
-            <div class="box"><label>Etnia</label><input type="text" value=""></div>
-            <div class="box"><label>Nacionalidade</label><input type="text" value=""></div>
+            <div class="box"><label for="ethnicity">Etnia</label><input type="text" id="ethnicity" value=""></div>
+            <div class="box"><label for="nationality">Nacionalidade</label><input type="text" id="nationality" value=""></div>
         </div>
 
         <div class="title-bar">CONVICÇÃO &amp; ASPECTOS</div>
-        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #e67e22;">
-            <input type="text" value="Convicção" style="font-size: 14px; color: #d35400;">
-            <textarea rows="2"></textarea>
+        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #a84300;">
+            <input type="text" value="Convicção" aria-label="Nome da convicção" style="font-size: 14px; color: #a84300;">
+            <textarea rows="2" aria-label="Descrição da convicção"></textarea>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="box"><input type="text" value="Aspecto 1"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 2"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 3"><textarea rows="4">Descrição</textarea></div>
-            <div class="box"><input type="text" value="Aspecto 4"><textarea rows="4">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 1" aria-label="Nome do aspecto 1"><textarea rows="4" aria-label="Descrição do aspecto 1">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 2" aria-label="Nome do aspecto 2"><textarea rows="4" aria-label="Descrição do aspecto 2">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 3" aria-label="Nome do aspecto 3"><textarea rows="4" aria-label="Descrição do aspecto 3">Descrição</textarea></div>
+            <div class="box"><input type="text" value="Aspecto 4" aria-label="Nome do aspecto 4"><textarea rows="4" aria-label="Descrição do aspecto 4">Descrição</textarea></div>
         </div>
 
         <div class="title-bar">ATRIBUTOS SOCIAIS</div>
         <div id="socialGrid" class="grid-social">
             <div class="box-social">
-                <span id="t-Charme" class="tier-badge">TIER 0</span><label>Charme</label>
+                <span id="t-Charme" class="tier-badge">TIER 0</span><label for="pts-Charme">Charme</label>
                 <div id="tit-Charme" class="title-display">Sem graça</div>
                 <input type="number" id="pts-Charme" value="0" data-attribute="Charme"
                     style="width:45px; text-align:center;">
             </div>
             <div class="box-social">
-                <span id="t-Conhecimento" class="tier-badge">TIER 0</span><label>Conhecimento</label>
+                <span id="t-Conhecimento" class="tier-badge">TIER 0</span><label for="pts-Conhecimento">Conhecimento</label>
                 <div id="tit-Conhecimento" class="title-display">Preguiçoso</div>
                 <input type="number" id="pts-Conhecimento" value="0" data-attribute="Conhecimento"
                     style="width:45px; text-align:center;">
             </div>
             <div class="box-social">
-                <span id="t-Coragem" class="tier-badge">TIER 0</span><label>Coragem</label>
+                <span id="t-Coragem" class="tier-badge">TIER 0</span><label for="pts-Coragem">Coragem</label>
                 <div id="tit-Coragem" class="title-display">Covarde</div>
                 <input type="number" id="pts-Coragem" value="0" data-attribute="Coragem"
                     style="width:45px; text-align:center;">
             </div>
             <div class="box-social">
-                <span id="t-Disciplina" class="tier-badge">TIER 0</span><label>Disciplina</label>
+                <span id="t-Disciplina" class="tier-badge">TIER 0</span><label for="pts-Disciplina">Disciplina</label>
                 <div id="tit-Disciplina" class="title-display">Desatento</div>
                 <input type="number" id="pts-Disciplina" value="0" data-attribute="Disciplina"
                     style="width:45px; text-align:center;">
             </div>
             <div class="box-social">
-                <span id="t-Empatia" class="tier-badge">TIER 0</span><label>Empatia</label>
+                <span id="t-Empatia" class="tier-badge">TIER 0</span><label for="pts-Empatia">Empatia</label>
                 <div id="tit-Empatia" class="title-display">Indiferente</div>
                 <input type="number" id="pts-Empatia" value="0" data-attribute="Empatia"
                     style="width:45px; text-align:center;">
             </div>
             <div class="box-social">
-                <span id="t-Expressão" class="tier-badge">TIER 0</span><label>Expressão</label>
+                <span id="t-Expressão" class="tier-badge">TIER 0</span><label for="pts-Expressão">Expressão</label>
                 <div id="tit-Expressão" class="title-display">Monótona</div>
                 <input type="number" id="pts-Expressão" value="0" data-attribute="Expressão"
                     style="width:45px; text-align:center;">
@@ -443,55 +443,55 @@
             <button type="button" id="addInventoryRowBtn" class="btn-add"
                 aria-label="Adicionar linha ao inventário" title="Adicionar linha ao inventário">+</button>
         </div>
-        <table>
+        <table aria-label="Inventário">
             <thead>
                 <tr>
-                    <th style="width:25%">Item</th>
-                    <th style="width:20%">Tipo</th>
-                    <th style="width:55%">Descrição / Efeito</th>
+                    <th scope="col" style="width:25%">Item</th>
+                    <th scope="col" style="width:20%">Tipo</th>
+                    <th scope="col" style="width:55%">Descrição / Efeito</th>
                 </tr>
             </thead>
             <tbody id="inventoryBody">
                 <tr>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Item do inventário, linha 1" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Tipo do inventário, linha 1" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Descrição do inventário, linha 1" value="-"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Item do inventário, linha 2" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Tipo do inventário, linha 2" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Descrição do inventário, linha 2" value="-"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Item do inventário, linha 3" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Tipo do inventário, linha 3" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Descrição do inventário, linha 3" value="-"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
-                    <td><input type="text" class="inv-input" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Item do inventário, linha 4" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Tipo do inventário, linha 4" value="-"></td>
+                    <td><input type="text" class="inv-input" aria-label="Descrição do inventário, linha 4" value="-"></td>
                 </tr>
             </tbody>
         </table>
 
         <div class="title-bar">TRABALHO</div>
         <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px;">
-            <div class="box"><label>Ocupação</label><input type="text" value=""></div>
-            <div class="box"><label>Ganho Semanal (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Horário</label><input type="text" value=""></div>
+            <div class="box"><label for="occupation">Ocupação</label><input type="text" id="occupation" value=""></div>
+            <div class="box"><label for="weeklyIncome">Ganho Semanal (PR)</label><input type="number" id="weeklyIncome" step="0.25" value=""></div>
+            <div class="box"><label for="workSchedule">Horário</label><input type="text" id="workSchedule" value=""></div>
         </div>
         <div class="grid-4" style="gap: 12px; margin-bottom: 20px;">
-            <div class="box"><label>Saldo (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Custo Semanal (PR)</label><input type="number" step="0.25" value=""></div>
-            <div class="box"><label>Atributo</label><input type="text" value=""></div>
-            <div class="box"><label>Bônus</label><input type="text" value=""></div>
+            <div class="box"><label for="balance">Saldo (PR)</label><input type="number" id="balance" step="0.25" value=""></div>
+            <div class="box"><label for="weeklyCost">Custo Semanal (PR)</label><input type="number" id="weeklyCost" step="0.25" value=""></div>
+            <div class="box"><label for="workAttribute">Atributo</label><input type="text" id="workAttribute" value=""></div>
+            <div class="box"><label for="workBonus">Bônus</label><input type="text" id="workBonus" value=""></div>
         </div>
 
-        <div class="title-bar">ANOTAÇÕES</div>
-        <textarea class="notes-area" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
+        <div class="title-bar" id="notesTitle">ANOTAÇÕES</div>
+        <textarea class="notes-area" aria-labelledby="notesTitle" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
     </div>
-    <div id="skillModalOverlay" class="skill-modal-overlay" hidden aria-hidden="true">
+    <div id="skillModalOverlay" class="skill-modal-overlay" hidden inert aria-hidden="true">
         <div class="skill-modal-box" role="dialog" aria-modal="true" aria-labelledby="skillModalTitle"
             aria-describedby="skillModalError">
             <h2 id="skillModalTitle" class="skill-modal-title">Nova Habilidade</h2>
@@ -684,6 +684,7 @@
 
             clearSkillModalError();
             overlay.hidden = false;
+            overlay.removeAttribute('inert');
             overlay.setAttribute('aria-hidden', 'false');
             nome.focus();
         }
@@ -691,6 +692,7 @@
         function closeSkillModal() {
             const overlay = document.getElementById('skillModalOverlay');
             overlay.hidden = true;
+            overlay.setAttribute('inert', '');
             overlay.setAttribute('aria-hidden', 'true');
             clearSkillModalError();
             skillModalReturnFocus?.focus();
@@ -758,10 +760,13 @@
         }
         function addRow() {
             const body = document.getElementById('inventoryBody');
+            const rowNumber = body.rows.length + 1;
+            const columnLabels = ['Item', 'Tipo', 'Descrição'];
             const row = createUiElement('tr');
             for (let index = 0; index < 3; index++) {
                 const cell = createUiElement('td');
                 const input = createUiElement('input', { className: 'inv-input', type: 'text', value: '-' });
+                input.setAttribute('aria-label', `${columnLabels[index]} do inventário, linha ${rowNumber}`);
                 cell.appendChild(input);
                 row.appendChild(cell);
             }

@@ -13,38 +13,38 @@
         <h1>DIGIMON RPG</h1>
 
         <div class="grid-4">
-            <div class="box"><label>Espécie</label><input type="text" id="charName" value=""></div>
-            <div class="box"><label>Nível</label><input type="text" value=""></div>
-            <div class="box"><label>Singularidade</label><input type="text" value=""></div>
-            <div class="box"><label>Campo</label><input type="text" value=""></div>
-            <div class="box"><label>Tamanho</label><input type="text" value=""></div>
-            <div class="box"><label>Deslocamento</label><input type="text" value=""></div>
-            <div class="box"><label>Sentido</label><input type="text" value=""></div>
+            <div class="box"><label for="charName">Espécie</label><input type="text" id="charName" value=""></div>
+            <div class="box"><label for="digimonLevel">Nível</label><input type="text" id="digimonLevel" value=""></div>
+            <div class="box"><label for="singularity">Singularidade</label><input type="text" id="singularity" value=""></div>
+            <div class="box"><label for="field">Campo</label><input type="text" id="field" value=""></div>
+            <div class="box"><label for="size">Tamanho</label><input type="text" id="size" value=""></div>
+            <div class="box"><label for="movement">Deslocamento</label><input type="text" id="movement" value=""></div>
+            <div class="box"><label for="sense">Sentido</label><input type="text" id="sense" value=""></div>
         </div>
 
         <div class="title-bar">ATRIBUTOS</div>
         <div class="grid-4">
-            <div class="box"><label>Saúde Digital (SD)</label><input type="text" value=""></div>
-            <div class="box"><label>Saúde Temporária</label><input type="text" value=""></div>
-            <div class="box"><label>Energia</label><input type="text" value=""></div>
-            <div class="box"><label>Energia Temporária</label><input type="text" value=""></div>
-            <div class="box"><label>Força</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Agilidade</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Precisão</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Vitalidade</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Espírito</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Adaptabilidade</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Lmt. Energia</label><input type="number" min="1" value=""></div>
-            <div class="box"><label>Memória</label>
+            <div class="box"><label for="digitalHealth">Saúde Digital (SD)</label><input type="text" id="digitalHealth" value=""></div>
+            <div class="box"><label for="temporaryHealth">Saúde Temporária</label><input type="text" id="temporaryHealth" value=""></div>
+            <div class="box"><label for="energy">Energia</label><input type="text" id="energy" value=""></div>
+            <div class="box"><label for="temporaryEnergy">Energia Temporária</label><input type="text" id="temporaryEnergy" value=""></div>
+            <div class="box"><label for="strength">Força</label><input type="number" id="strength" min="1" value=""></div>
+            <div class="box"><label for="agility">Agilidade</label><input type="number" id="agility" min="1" value=""></div>
+            <div class="box"><label for="precision">Precisão</label><input type="number" id="precision" min="1" value=""></div>
+            <div class="box"><label for="vitality">Vitalidade</label><input type="number" id="vitality" min="1" value=""></div>
+            <div class="box"><label for="spirit">Espírito</label><input type="number" id="spirit" min="1" value=""></div>
+            <div class="box"><label for="adaptability">Adaptabilidade</label><input type="number" id="adaptability" min="1" value=""></div>
+            <div class="box"><label for="energyLimit">Lmt. Energia</label><input type="number" id="energyLimit" min="1" value=""></div>
+            <div class="box" role="group" aria-labelledby="memoryLabel"><span id="memoryLabel" class="field-label">Memória</span>
                 <div style="display: flex; align-items: center; justify-content: space-around; gap: 5px;">
-                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">SALDO</label>
-                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    <div style="text-align: center;"><label for="memoryBalance" style="font-size: 7px; margin-bottom: 0;">SALDO</label>
+                        <input type="number" id="memoryBalance" value="0" style="width: 35px; text-align: center;">
                     </div>
 
-                    <span style="color: #2980b9; font-weight: bold; margin-top: 10px;">|</span>
+                    <span style="color: #24658f; font-weight: bold; margin-top: 10px;">|</span>
 
-                    <div style="text-align: center;"><label style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
-                        <input type="number" value="0" style="width: 35px; text-align: center;">
+                    <div style="text-align: center;"><label for="memoryTotal" style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
+                        <input type="number" id="memoryTotal" value="0" style="width: 35px; text-align: center;">
                     </div>
                 </div>
             </div>
@@ -53,10 +53,10 @@
         <div class="title-bar">COMBATE</div>
 
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label>Lista de Magias</label><input type="text" value="">
+            <div class="box" style="margin-bottom: 10px;"><label for="spellList">Lista de Magias</label><input type="text" id="spellList" value="">
             </div>
             <div class="box" style="margin-bottom: 10px;">
-                <label>Condições</label>
+                <label for="conditionSelectTrigger">Condições</label>
                 <div class="multiselect">
                     <button type="button" class="selectBox" id="conditionSelectTrigger" aria-expanded="false"
                         aria-controls="checkboxes" aria-haspopup="true">
@@ -116,21 +116,21 @@
             </div>
         </div>
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label>Resistência</label><input type="text" value="">
+            <div class="box" style="margin-bottom: 10px;"><label for="resistance">Resistência</label><input type="text" id="resistance" value="">
             </div>
-            <div class="box" style="margin-bottom: 10px;"><label>Vulnerabilidade</label><input type="text" value="">
+            <div class="box" style="margin-bottom: 10px;"><label for="vulnerability">Vulnerabilidade</label><input type="text" id="vulnerability" value="">
             </div>
         </div>
 
         <div class="grid-4">
-            <div class="box"><label>Iniciativa</label><input type="number" value="0"></div>
-            <div class="box"><label>Acerto</label><input type="number" value="0"></div>
-            <div class="box"><label>Esquiva</label><input type="number" value="0"></div>
-            <div class="box"><label>Fortificação</label><input type="number" value="0"></div>
-            <div class="box"><label>Furtividade</label><input type="number" value="0"></div>
-            <div class="box"><label>Manobra</label><input type="number" value="0"></div>
-            <div class="box"><label>BCA</label><input type="number" min="-3" max="3" value="0"></div>
-            <div class="box"><label>BCE</label><input type="number" min="-3" max="3" value="0"></div>
+            <div class="box"><label for="initiative">Iniciativa</label><input type="number" id="initiative" value="0"></div>
+            <div class="box"><label for="accuracy">Acerto</label><input type="number" id="accuracy" value="0"></div>
+            <div class="box"><label for="evasion">Esquiva</label><input type="number" id="evasion" value="0"></div>
+            <div class="box"><label for="fortification">Fortificação</label><input type="number" id="fortification" value="0"></div>
+            <div class="box"><label for="stealth">Furtividade</label><input type="number" id="stealth" value="0"></div>
+            <div class="box"><label for="maneuver">Manobra</label><input type="number" id="maneuver" value="0"></div>
+            <div class="box"><label for="bca">BCA</label><input type="number" id="bca" min="-3" max="3" value="0"></div>
+            <div class="box"><label for="bce">BCE</label><input type="number" id="bce" min="-3" max="3" value="0"></div>
         </div>
 
 {{COMPONENT_INVENTORY}}
@@ -153,8 +153,8 @@
         </div>
         <div id="powersContainer"></div>
 
-        <div class="title-bar">ANOTAÇÕES</div>
-        <textarea class="notes-area" placeholder="Anotações da campanha..."></textarea>
+        <div class="title-bar" id="notesTitle">ANOTAÇÕES</div>
+        <textarea class="notes-area" aria-labelledby="notesTitle" placeholder="Anotações da campanha..."></textarea>
     </div>
 
 
