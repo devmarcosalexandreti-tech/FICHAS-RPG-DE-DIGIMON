@@ -1,5 +1,7 @@
 # Auditoria Técnica — Fichas HTML ASAFE
 
+> **Documento histórico:** este relatório registra o estado encontrado em 25 de setembro de 2026, antes das correções posteriores. Para instalação, testes e estado operacional atual, consulte `README.md` e `TESTING.md`.
+
 **Data da auditoria:** 25 de setembro de 2026  
 **Escopo:** repositório local completo, sem alteração de código-fonte, configuração ou artefatos existentes  
 **Branch auditada:** `improve/audit-roadmap`  

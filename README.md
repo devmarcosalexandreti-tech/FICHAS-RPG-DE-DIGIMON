@@ -1,92 +1,172 @@
 # Fichas HTML ASAFE
 
-Fichas autocontidas de Digimon e Domador para preenchimento no navegador. Cada arquivo reúne HTML, CSS e JavaScript e pode ser distribuído, preenchido, baixado e reaberto sem servidor ou dependências externas.
+Fichas autocontidas de Digimon e Domador para preenchimento diretamente no navegador. Cada ficha reúne HTML, CSS e JavaScript em um único arquivo que pode ser aberto, editado, baixado e reaberto sem servidor ou conexão com a internet.
 
-## Arquivos principais
+## Problema resolvido
 
-- `DRPG_Ficha_Digimon_v1.5.html`: ficha de Digimon.
-- `DRPG_Ficha_Domador_v1.4.html`: ficha de Domador.
-- `src/`: fontes organizadas usadas para gerar as fichas.
-- `scripts/build.mjs`: incorpora componentes, estilos e scripts nos HTMLs finais.
-- `REGRESSION_CHECKLIST.md`: roteiro de validação manual.
-- `TESTING.md`: estratégia, cobertura e limitações dos testes automatizados.
-- `tests/sheets.spec.js`: testes dos fluxos críticos com Playwright.
-- `tests/visual.spec.js`: comparação visual das duas fichas.
+Fichas editáveis normalmente dependem de uma aplicação hospedada ou perdem o estado quando a página é fechada. Este projeto mantém a portabilidade de um arquivo HTML único e permite incorporar os dados preenchidos em uma nova cópia baixada pelo usuário.
+
+## Prévia
+
+| Ficha de Digimon | Ficha de Domador |
+| --- | --- |
+| ![Ficha de Digimon](tests/visual.spec.js-snapshots/digimon-win32.png) | ![Ficha de Domador](tests/visual.spec.js-snapshots/domador-win32.png) |
+
+As imagens acima são os baselines reais utilizados pelos testes de regressão visual.
+
+## Funcionalidades
+
+- preenchimento de campos de identificação, atributos, combate, trabalho e anotações;
+- inventário com inclusão dinâmica de linhas;
+- criação, edição e exclusão de habilidades;
+- criação, edição e exclusão de poderes na ficha de Digimon;
+- seleção de condições do Digimon;
+- cálculo dos tiers de atributos sociais do Domador;
+- validação dos campos obrigatórios dos modais;
+- navegação de modal por teclado, contenção de foco e nomes acessíveis;
+- aviso de alterações não salvas;
+- download da ficha com o estado atual incorporado;
+- reabertura e novos salvamentos do HTML baixado;
+- sanitização do nome do arquivo e serialização segura da entrada do usuário;
+- funcionamento offline e sem dependências de runtime.
 
 ## Uso
 
-1. Abra a ficha desejada diretamente em um navegador moderno.
-2. Preencha os campos e use os botões `+` para inventário, habilidades ou poderes.
-3. Clique em `Baixar Ficha`.
-4. Abra o HTML baixado para continuar a edição.
+Não é necessário instalar Node.js para preencher as fichas.
 
-O download contém o estado atual dos campos. Entradas do usuário são serializadas como texto ou atributos escapados e não são interpretadas como HTML executável.
+1. Baixe ou localize `DRPG_Ficha_Digimon_v1.5.html` ou `DRPG_Ficha_Domador_v1.4.html`.
+2. Abra o arquivo diretamente em um navegador moderno.
+3. Preencha os campos e use os botões `+` para inventário, habilidades ou poderes.
+4. Clique em `Baixar Ficha`.
+5. Abra o HTML baixado para continuar a edição posteriormente.
 
-## Validação e acessibilidade
+O arquivo baixado contém o estado atual dos controles. Textos digitados são serializados como texto ou atributos escapados e não são interpretados como marcação executável.
 
-Os modais exigem apenas o nome da habilidade ou do poder; os demais campos continuam opcionais. Erros são exibidos junto ao formulário, sem alertas bloqueantes. Ao abrir um modal, o foco vai para `Nome`; `Tab` permanece dentro do diálogo, `Esc` fecha e o foco retorna ao controle que iniciou a ação.
+## Arquitetura
 
-Botões representados apenas por `+`, `X` ou ícone possuem nomes acessíveis e dicas de contexto. O seletor de condições do Digimon expõe seu estado aberto ou fechado por `aria-expanded`.
+Os fontes são organizados por responsabilidade durante o desenvolvimento. O build incorpora tudo nos dois HTMLs finais:
 
-## Desenvolvimento
+```text
+templates + components + styles + shared.js + script específico
+                              │
+                              ▼
+                 HTML autocontido distribuível
+```
 
-Pré-requisitos: Node.js 20 ou superior e npm.
+- `src/templates/`: estrutura principal de cada ficha;
+- `src/components/`: inventários, modais e atributos sociais;
+- `src/styles/`: estilos específicos e ponto compartilhado;
+- `src/scripts/shared.js`: criação de elementos, foco, serialização, nome de arquivo e download;
+- `src/scripts/digimon.js` e `domador.js`: regras e interação de cada ficha;
+- `scripts/build.mjs`: composição determinística dos artefatos;
+- `scripts/validate-source.mjs`: guardas contra APIs inseguras e código inválido.
+
+Essa separação mantém os fontes legíveis sem quebrar o requisito de distribuição em arquivo único. O projeto não utiliza React, backend, API, banco de dados ou gerenciamento global de estado porque essas responsabilidades não existem no produto.
+
+## Tecnologias
+
+| Área | Ferramenta |
+| --- | --- |
+| Interface | HTML5, CSS3 e JavaScript nativo |
+| Build | Node.js com módulos ESM |
+| Testes unitários | `node:test` |
+| Testes funcionais e visuais | Playwright |
+| Validação de HTML | html-validate |
+| Validação de CSS | Stylelint e postcss-html |
+| Integração contínua | GitHub Actions em Windows/Chromium |
+
+## Desenvolvimento local
+
+### Pré-requisitos
+
+- Node.js 20.17 ou superior;
+- npm 10 ou superior;
+- Git.
+
+### Instalação
+
+Após obter o repositório:
 
 ```powershell
 npm ci
 npx playwright install chromium
-npm run build:check
+```
+
+O projeto não usa variáveis de ambiente. Nenhum arquivo `.env` ou configuração de credenciais é necessário.
+
+### Fluxo de alteração
+
+1. Edite os arquivos em `src/`.
+2. Gere os HTMLs da raiz.
+3. Execute as validações e os testes.
+4. Revise qualquer diferença visual antes de atualizar snapshots.
+
+```powershell
 npm run build
 npm test
 ```
 
-Comandos disponíveis:
+Os HTMLs da raiz são artefatos de distribuição e não devem ser editados manualmente.
 
-- `npm run build`: gera os dois HTMLs autocontidos a partir de `src/`.
-- `npm run build:check`: verifica se os HTMLs gerados estão atualizados.
-- `npm run validate`: verifica o build e valida JavaScript, marcação HTML e CSS.
-- `npm run test:unit:coverage`: mede a cobertura dos módulos Node exercitados pelos testes unitários.
-- `npm run test:e2e`: executa os fluxos Playwright.
-- `npm test`: gera os artefatos e executa todas as validações e testes.
+## Comandos
 
-Os HTMLs da raiz são artefatos de distribuição. Alterações devem ser feitas em `src/` e materializadas com `npm run build`.
+| Comando | Finalidade |
+| --- | --- |
+| `npm run build` | Gera os dois HTMLs autocontidos |
+| `npm run build:check` | Confirma que os artefatos correspondem aos fontes |
+| `npm run validate` | Valida build, JavaScript, HTML e CSS |
+| `npm run test:unit` | Executa os testes Node |
+| `npm run test:unit:coverage` | Mede a cobertura dos módulos Node testados |
+| `npm run test:e2e` | Executa fluxos, acessibilidade e snapshots Playwright |
+| `npm test` | Executa build, validações e todas as suítes |
 
-## Estrutura de fontes
+Detalhes da estratégia, do escopo e das limitações estão em [TESTING.md](TESTING.md). A verificação manual está em [REGRESSION_CHECKLIST.md](REGRESSION_CHECKLIST.md).
+
+## Estrutura do repositório
 
 ```text
-src/
-  components/digimon/   inventário e modal
-  components/domador/   atributos sociais, inventário e modal
-  scripts/              lógica específica e helpers compartilhados
-  styles/               estilos específicos e ponto de extensão compartilhado
-  templates/            estrutura principal de cada ficha
+.
+├── .github/workflows/ci.yml       integração contínua
+├── scripts/                       build e validação de fontes
+├── src/                           fontes editáveis
+├── tests/                         Playwright funcional, acessível e visual
+├── unit-tests/                    testes Node
+├── DRPG_Ficha_Digimon_v1.5.html   artefato distribuível
+├── DRPG_Ficha_Domador_v1.4.html   artefato distribuível
+├── TESTING.md                     estratégia de testes
+└── REGRESSION_CHECKLIST.md        validação manual
 ```
 
-O projeto é uma aplicação estática sem React, API, navegação ou sistema de tipos. Por isso, diretórios vazios de hooks, services e types não foram criados. A separação segue as responsabilidades que existem de fato no código.
+## Segurança
 
-## Decisão de arquitetura
+- Não existem chamadas de rede, autenticação, cookies, armazenamento web ou credenciais de aplicação.
+- O validador rejeita `innerHTML`, handlers inline, `eval`, URLs `javascript:` e APIs equivalentes de injeção.
+- Os testes salvam e reabrem entradas contendo `<script>` para verificar que permaneçam como texto.
+- Dependências são verificadas com `npm audit` no workflow de CI.
 
-HTML, CSS e JavaScript são mantidos em fontes separadas durante o desenvolvimento. O build incorpora tudo nos dois HTMLs finais, preservando o uso offline, o download e a reabertura sem arquivos auxiliares.
+Um HTML é código executável por definição. Abra fichas recebidas de terceiros somente quando confiar na origem; a proteção da serialização cobre a entrada digitada na aplicação, não código previamente inserido por outra pessoa no arquivo.
 
-Helpers sem estado para criação de elementos, contenção de foco, serialização segura, sanitização de nomes e download ficam em `src/scripts/shared.js`. Regras e estado de cada ficha permanecem nos scripts específicos.
+Não publique credenciais em issues. Relatos de segurança devem ser enviados por um canal privado definido pelo mantenedor do futuro repositório público.
 
-### Avaliação de CSS/JS compartilhado
+## Limitações conhecidas
 
-| Alternativa | Vantagem | Limitação | Decisão |
-| --- | --- | --- | --- |
-| `shared.css` e `shared.js` externos | Uma única fonte comum | Quebra a portabilidade quando o HTML é movido | Não usar nos artefatos finais |
-| Duplicação integral nos HTMLs-fonte | Dispensa build | Aumenta custo e risco de manutenção | Substituída |
-| Fontes compartilhadas com etapa de build | Centraliza manutenção e mantém HTMLs autocontidos | Exige gerar artefatos após alterações | Adotada |
+- O layout tem largura fixa e é orientado a desktop; responsividade móvel ainda não é suportada oficialmente.
+- Os snapshots visuais possuem Windows/Chromium como plataforma canônica.
+- Não há sincronização em nuvem, colaboração simultânea ou armazenamento centralizado.
+- Impressão não possui uma suíte visual dedicada.
+- Bloqueios de download impostos por políticas específicas do navegador dependem de validação manual.
 
-O CSS visual continua específico por ficha. Regras parecidas possuem diferenças de valores e posição na cascata; movê-las agora criaria risco de regressão visual sem eliminar duplicação equivalente. `src/styles/shared.css` fica reservado para regras cuja equivalência seja comprovada por testes visuais.
+## Melhorias futuras possíveis
 
-## Convenções de manutenção
+- avaliar layout responsivo caso mobile se torne requisito;
+- reduzir estilos inline restantes de forma incremental e visualmente validada;
+- ampliar a validação manual com leitor de tela real;
+- criar releases contendo os HTMLs gerados após a publicação do repositório.
 
-- Eventos devem ser registrados com `addEventListener`; handlers inline e propriedades como `.onclick` são rejeitados pelo validador.
-- Elementos dinâmicos devem usar classes ou atributos `data-*` estáveis.
-- Seletores não devem depender de estilos inline nem de cadeias como `parentElement.parentElement`.
-- Novos campos persistentes devem ser cobertos pelo fluxo de salvar e reabrir no Playwright.
-- Componentes compartilhados só devem conter comportamento idêntico nas duas fichas.
-- Os HTMLs gerados não devem ser editados manualmente.
+## Contribuição
 
-Os testes usam o Chromium gerenciado pelo Playwright, sem depender de um navegador já instalado na máquina. Os snapshots visuais possuem o Windows como plataforma canônica e o workflow de CI executa a mesma suíte em `windows-latest`.
+Consulte [CONTRIBUTING.md](CONTRIBUTING.md) antes de propor alterações. Mudanças devem preservar o funcionamento offline, os formatos dos arquivos e os fluxos de salvar/reabrir.
+
+## Licença
+
+Este projeto ainda não possui uma licença definida. A publicação do código não concede automaticamente permissão de reutilização; o arquivo `LICENSE` deve ser adicionado somente após decisão explícita do titular.
