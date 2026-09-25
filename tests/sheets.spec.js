@@ -1,40 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { copyFile } from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
-
-const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const injection = "Teste </textarea><script>window.__sheetXss = true</script> & acao";
-
-async function openSheet(page, filename) {
-  await page.goto(pathToFileURL(path.join(projectRoot, filename)).href);
-}
-
-async function saveAndReopen(page, testInfo, outputFilename) {
-  const downloadPromise = page.waitForEvent("download");
-  await page.locator("#btnSalvar").click();
-  const download = await downloadPromise;
-  const savedPath = testInfo.outputPath(outputFilename);
-  await copyFile(await download.path(), savedPath);
-  await page.goto(pathToFileURL(savedPath).href);
-  return download.suggestedFilename();
-}
-
-async function expectAccessibleControls(page) {
-  const unnamedControls = await page.locator("input, textarea, select").evaluateAll((controls) => controls
-    .filter((control) => {
-      const nativeLabel = Array.from(control.labels || []).some((label) => label.textContent.trim());
-      const ariaLabel = control.getAttribute("aria-label")?.trim();
-      const labelledBy = (control.getAttribute("aria-labelledby") || "")
-        .split(/\s+/)
-        .filter(Boolean)
-        .some((id) => document.getElementById(id)?.textContent.trim());
-      return !nativeLabel && !ariaLabel && !labelledBy;
-    })
-    .map((control) => control.outerHTML));
-
-  expect(unnamedControls).toEqual([]);
-}
+import {
+  SCRIPT_INJECTION,
+  expectAccessibleControls,
+  openSheet,
+  saveAndReopen
+} from "./helpers/sheets.js";
 
 async function expectDigimonInventoryRowContract(row) {
   await expect(row).toHaveClass(/\binventory-row\b/);
@@ -50,7 +20,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.getByRole("table", { name: "Inventário" })).toHaveClass("inventory-table");
   await expectDigimonInventoryRowContract(page.locator("#inventoryBody tr").first());
   await page.locator("#charName").fill("Teste / Digimon");
-  await page.locator(".notes-area").fill(injection);
+  await page.locator(".notes-area").fill(SCRIPT_INJECTION);
 
   const initialRows = await page.locator("#inventoryBody tr").count();
   await page.locator("#addInventoryRowBtn").click();
@@ -61,7 +31,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.getByLabel(`Item do inventário, linha ${initialRows + 1}`)).toBeVisible();
   await inventoryInputs.nth(0).fill("Poção");
   await inventoryInputs.nth(1).fill("Consumível");
-  await inventoryInputs.nth(2).fill(injection);
+  await inventoryInputs.nth(2).fill(SCRIPT_INJECTION);
 
   await page.locator("#addSkillBtn").click();
   await page.locator("#modalCancelBtn").click();
@@ -86,7 +56,7 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.locator("#modalError")).toHaveText("Informe o nome da habilidade.");
   await expect(page.locator("#m_nome")).toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
-  await page.locator("#m_nome").fill(injection);
+  await page.locator("#m_nome").fill(SCRIPT_INJECTION);
   await expect(page.locator("#modalError")).toBeHidden();
   await page.locator("#m_tipo").fill("Ataque");
   await page.locator("#m_alc").fill("Perto");
@@ -94,13 +64,13 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await page.locator("#m_dur").fill("Cena");
   await page.locator("#m_aca").fill("Livre");
   await page.locator("#m_uso").fill("1");
-  await page.locator("#m_desc").fill(injection);
+  await page.locator("#m_desc").fill(SCRIPT_INJECTION);
   await page.locator("#m_efe").fill("Efeito seguro");
   await page.locator("#saveModalBtn").click();
 
   const skill = page.locator("#skillsContainer .skill-item");
   await expect(skill).toHaveCount(1);
-  await expect(skill.locator(".skill-name")).toHaveText(injection);
+  await expect(skill.locator(".skill-name")).toHaveText(SCRIPT_INJECTION);
   await expect(skill.locator('[data-action="edit-skill"]')).toHaveAttribute("aria-label", /Editar habilidade/);
   await expect(page.locator("#modalOverlay")).toHaveAttribute("aria-hidden", "true");
   await expect(page.locator("#modalOverlay")).toHaveAttribute("inert", "");
@@ -125,10 +95,10 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Digimon");
   await expectAccessibleControls(page);
-  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator(".notes-area")).toHaveValue(SCRIPT_INJECTION);
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Poção");
-  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);
-  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(SCRIPT_INJECTION);
+  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(SCRIPT_INJECTION);
   await expect(page.locator("#powersContainer .skill-name")).toHaveText("Escudo Prismático");
   await expect(page.locator('#checkboxes input[value="Ofuscado"]')).toBeChecked();
   await expect(page.locator("#conditionSelectTrigger")).toHaveAttribute("aria-expanded", "true");
@@ -137,16 +107,16 @@ test("Digimon: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.locator("#checkboxes")).toBeHidden();
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
   await page.locator('#skillsContainer [data-action="edit-skill"]').click();
-  await expect(page.locator("#m_nome")).toHaveValue(injection);
+  await expect(page.locator("#m_nome")).toHaveValue(SCRIPT_INJECTION);
   await page.keyboard.press("Escape");
 
   await page.locator('#powersContainer [data-action="delete-skill"]').click();
   await expect(page.locator("#powersContainer .skill-item")).toHaveCount(0);
   await saveAndReopen(page, testInfo, "digimon-second-save.html");
   await expect(page.locator("#powersContainer .skill-item")).toHaveCount(0);
-  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
+  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(SCRIPT_INJECTION);
   await expect(page.locator('#checkboxes input[value="Ofuscado"]')).toBeChecked();
-  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator(".notes-area")).toHaveValue(SCRIPT_INJECTION);
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
 });
 
@@ -155,7 +125,7 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expectAccessibleControls(page);
   await expect(page.getByLabel("Coragem", { exact: true })).toHaveAttribute("id", "pts-Coragem");
   await page.locator("#charName").fill("Teste / Domador");
-  await page.locator(".notes-area").fill(injection);
+  await page.locator(".notes-area").fill(SCRIPT_INJECTION);
 
   const courage = page.locator('[data-attribute="Coragem"]');
   const tierCases = [
@@ -184,7 +154,7 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.getByLabel(`Item do inventário, linha ${initialRows + 1}`)).toBeVisible();
   await inventoryInputs.nth(0).fill("Notebook");
   await inventoryInputs.nth(1).fill("Equipamento");
-  await inventoryInputs.nth(2).fill(injection);
+  await inventoryInputs.nth(2).fill(SCRIPT_INJECTION);
 
   await page.locator("#addSkillBtn").click();
   await page.locator("#skillCancelBtn").click();
@@ -209,10 +179,10 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   await expect(page.locator("#skillModalError")).toHaveText("Informe o nome da habilidade.");
   await expect(page.locator("#s_nome")).toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
-  await page.locator("#s_nome").fill(injection);
+  await page.locator("#s_nome").fill(SCRIPT_INJECTION);
   await expect(page.locator("#skillModalError")).toBeHidden();
   await page.locator("#s_tipo").fill("Social");
-  await page.locator("#s_desc").fill(injection);
+  await page.locator("#s_desc").fill(SCRIPT_INJECTION);
   await page.locator("#skillSaveBtn").click();
 
   const skill = page.locator("#skillsContainer .skill-item");
@@ -230,23 +200,23 @@ test("Domador: adicionar, editar, salvar e reabrir", async ({ page }, testInfo) 
   expect(filename).not.toContain("/");
   await expect(page.locator("#charName")).toHaveValue("Teste / Domador");
   await expectAccessibleControls(page);
-  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator(".notes-area")).toHaveValue(SCRIPT_INJECTION);
   await expect(page.locator("#inventoryBody tr").last().locator("input").nth(0)).toHaveValue("Notebook");
-  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(injection);
+  await expect(page.locator("#inventoryBody tr").last().locator("input").nth(2)).toHaveValue(SCRIPT_INJECTION);
   await expect(courage).toHaveValue("30");
   await expect(page.locator("#t-Coragem")).toHaveText("TIER 3");
   await expect(page.locator("#tit-Coragem")).toHaveText("Bravo");
-  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(injection);
+  await expect(page.locator("#skillsContainer .skill-name")).toHaveText(SCRIPT_INJECTION);
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
   await page.locator('#skillsContainer [data-action="edit-skill"]').click();
-  await expect(page.locator("#s_nome")).toHaveValue(injection);
+  await expect(page.locator("#s_nome")).toHaveValue(SCRIPT_INJECTION);
   await page.keyboard.press("Escape");
 
   await page.locator('#skillsContainer [data-action="delete-skill"]').click();
   await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
   await saveAndReopen(page, testInfo, "domador-second-save.html");
   await expect(page.locator("#skillsContainer .skill-item")).toHaveCount(0);
-  await expect(page.locator(".notes-area")).toHaveValue(injection);
+  await expect(page.locator(".notes-area")).toHaveValue(SCRIPT_INJECTION);
   await expect(page.locator("#t-Coragem")).toHaveText("TIER 3");
   expect(await page.evaluate(() => window.__sheetXss)).toBeUndefined();
 });

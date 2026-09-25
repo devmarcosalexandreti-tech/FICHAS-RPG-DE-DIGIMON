@@ -16,6 +16,7 @@
     "validate:html": "html-validate DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
     "validate:css": "stylelint DRPG_Ficha_Digimon_v1.5.html DRPG_Ficha_Domador_v1.4.html",
     "test:unit": "node unit-tests/build-and-guards.test.mjs",
+    "test:unit:coverage": "node --test --experimental-test-coverage unit-tests/build-and-guards.test.mjs",
     "test:e2e": "playwright test",
     "test": "npm run build && npm run validate && npm run test:unit && npm run test:e2e"
   },

@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import { replaceRequiredPlaceholder } from "../scripts/build.mjs";
 import { validateHtmlSource } from "../scripts/validate-source.mjs";
@@ -51,4 +54,15 @@ test("validateHtmlSource aceita script seguro", () => {
     validateHtmlSource("<script>const valor = document.createElement('span');</script>", "sheet.html"),
     []
   );
+});
+
+test("build check independe do diretório atual", () => {
+  const buildScript = fileURLToPath(new URL("../scripts/build.mjs", import.meta.url));
+  const result = spawnSync(process.execPath, [buildScript, "--check"], {
+    cwd: tmpdir(),
+    encoding: "utf8"
+  });
+
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /HTMLs gerados estão atualizados/);
 });
