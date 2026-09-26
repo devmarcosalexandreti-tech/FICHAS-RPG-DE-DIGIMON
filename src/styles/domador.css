@@ -51,6 +51,37 @@
             gap: 12px;
         }
 
+        .identity-secondary {
+            margin-top: 10px;
+        }
+
+        .box.conviction-box {
+            margin-bottom: 10px;
+            border-left: 5px solid #a84300;
+        }
+
+        .conviction-name {
+            font-size: 14px;
+            color: #a84300;
+        }
+
+        .aspects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .work-primary-grid {
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .work-secondary-grid {
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
         .grid-social {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -72,6 +103,11 @@
             padding: 8px;
             border-radius: 5px;
             background: #fffaf5;
+            text-align: center;
+        }
+
+        .social-points {
+            width: 45px;
             text-align: center;
         }
 
@@ -118,6 +154,10 @@
             box-sizing: border-box;
             display: block;
             margin-bottom: 6px;
+        }
+
+        .notes-area-initial {
+            height: 354px;
         }
 
         .tier-badge {
@@ -264,6 +304,18 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+
+        .skill-description-field {
+            margin-top: 10px;
+        }
+
+        .skill-description-input {
+            width: 100%;
+            border: 1px solid #dcdde1;
+            border-radius: 4px;
+            padding: 6px;
+            background: #f9f9f9;
+        }
         .skill-modal-actions {
             display: flex;
             justify-content: flex-end;
@@ -311,6 +363,18 @@
             border-bottom: 2px solid #a84300;
             padding: 5px;
             text-transform: uppercase;
+        }
+
+        .inventory-column-item {
+            width: 25%;
+        }
+
+        .inventory-column-type {
+            width: 20%;
+        }
+
+        .inventory-column-description {
+            width: 55%;
         }
 
         td {

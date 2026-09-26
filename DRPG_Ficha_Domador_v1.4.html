@@ -59,6 +59,37 @@
             gap: 12px;
         }
 
+        .identity-secondary {
+            margin-top: 10px;
+        }
+
+        .box.conviction-box {
+            margin-bottom: 10px;
+            border-left: 5px solid #a84300;
+        }
+
+        .conviction-name {
+            font-size: 14px;
+            color: #a84300;
+        }
+
+        .aspects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .work-primary-grid {
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .work-secondary-grid {
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
         .grid-social {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -80,6 +111,11 @@
             padding: 8px;
             border-radius: 5px;
             background: #fffaf5;
+            text-align: center;
+        }
+
+        .social-points {
+            width: 45px;
             text-align: center;
         }
 
@@ -126,6 +162,10 @@
             box-sizing: border-box;
             display: block;
             margin-bottom: 6px;
+        }
+
+        .notes-area-initial {
+            height: 354px;
         }
 
         .tier-badge {
@@ -272,6 +312,18 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+
+        .skill-description-field {
+            margin-top: 10px;
+        }
+
+        .skill-description-input {
+            width: 100%;
+            border: 1px solid #dcdde1;
+            border-radius: 4px;
+            padding: 6px;
+            background: #f9f9f9;
+        }
         .skill-modal-actions {
             display: flex;
             justify-content: flex-end;
@@ -321,6 +373,18 @@
             text-transform: uppercase;
         }
 
+        .inventory-column-item {
+            width: 25%;
+        }
+
+        .inventory-column-type {
+            width: 20%;
+        }
+
+        .inventory-column-description {
+            width: 55%;
+        }
+
         td {
             border-bottom: 1px solid #eee;
             padding: 5px;
@@ -362,7 +426,7 @@
             <div class="box"><label for="aspectPoints">P. Aspecto</label><input type="number" id="aspectPoints" value=""></div>
         </div>
 
-        <div class="grid-5" style="margin-top: 10px;">
+        <div class="grid-5 identity-secondary">
             <div class="box"><label for="sex">Sexo</label><input type="text" id="sex" value=""></div>
             <div class="box"><label for="age">Idade</label><input type="number" id="age" value=""></div>
             <div class="box"><label for="height">Altura (m)</label><input type="number" id="height" step="0.1" min="1.0" max="2.5" value="">
@@ -372,12 +436,12 @@
         </div>
 
         <div class="title-bar">CONVICÇÃO &amp; ASPECTOS</div>
-        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #a84300;">
-            <input type="text" value="Convicção" aria-label="Nome da convicção" style="font-size: 14px; color: #a84300;">
+        <div class="box conviction-box">
+            <input type="text" class="conviction-name" value="Convicção" aria-label="Nome da convicção">
             <textarea rows="2" aria-label="Descrição da convicção"></textarea>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="aspects-grid">
             <div class="box"><input type="text" value="Aspecto 1" aria-label="Nome do aspecto 1"><textarea rows="4" aria-label="Descrição do aspecto 1">Descrição</textarea></div>
             <div class="box"><input type="text" value="Aspecto 2" aria-label="Nome do aspecto 2"><textarea rows="4" aria-label="Descrição do aspecto 2">Descrição</textarea></div>
             <div class="box"><input type="text" value="Aspecto 3" aria-label="Nome do aspecto 3"><textarea rows="4" aria-label="Descrição do aspecto 3">Descrição</textarea></div>
@@ -389,38 +453,32 @@
             <div class="box-social">
                 <span id="t-Charme" class="tier-badge">TIER 0</span><label for="pts-Charme">Charme</label>
                 <div id="tit-Charme" class="title-display">Sem graça</div>
-                <input type="number" id="pts-Charme" value="0" data-attribute="Charme"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Charme" class="social-points" value="0" data-attribute="Charme">
             </div>
             <div class="box-social">
                 <span id="t-Conhecimento" class="tier-badge">TIER 0</span><label for="pts-Conhecimento">Conhecimento</label>
                 <div id="tit-Conhecimento" class="title-display">Preguiçoso</div>
-                <input type="number" id="pts-Conhecimento" value="0" data-attribute="Conhecimento"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Conhecimento" class="social-points" value="0" data-attribute="Conhecimento">
             </div>
             <div class="box-social">
                 <span id="t-Coragem" class="tier-badge">TIER 0</span><label for="pts-Coragem">Coragem</label>
                 <div id="tit-Coragem" class="title-display">Covarde</div>
-                <input type="number" id="pts-Coragem" value="0" data-attribute="Coragem"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Coragem" class="social-points" value="0" data-attribute="Coragem">
             </div>
             <div class="box-social">
                 <span id="t-Disciplina" class="tier-badge">TIER 0</span><label for="pts-Disciplina">Disciplina</label>
                 <div id="tit-Disciplina" class="title-display">Desatento</div>
-                <input type="number" id="pts-Disciplina" value="0" data-attribute="Disciplina"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Disciplina" class="social-points" value="0" data-attribute="Disciplina">
             </div>
             <div class="box-social">
                 <span id="t-Empatia" class="tier-badge">TIER 0</span><label for="pts-Empatia">Empatia</label>
                 <div id="tit-Empatia" class="title-display">Indiferente</div>
-                <input type="number" id="pts-Empatia" value="0" data-attribute="Empatia"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Empatia" class="social-points" value="0" data-attribute="Empatia">
             </div>
             <div class="box-social">
                 <span id="t-Expressão" class="tier-badge">TIER 0</span><label for="pts-Expressão">Expressão</label>
                 <div id="tit-Expressão" class="title-display">Monótona</div>
-                <input type="number" id="pts-Expressão" value="0" data-attribute="Expressão"
-                    style="width:45px; text-align:center;">
+                <input type="number" id="pts-Expressão" class="social-points" value="0" data-attribute="Expressão">
             </div>
         </div>
 
@@ -446,9 +504,9 @@
         <table aria-label="Inventário">
             <thead>
                 <tr>
-                    <th scope="col" style="width:25%">Item</th>
-                    <th scope="col" style="width:20%">Tipo</th>
-                    <th scope="col" style="width:55%">Descrição / Efeito</th>
+                    <th class="inventory-column-item" scope="col">Item</th>
+                    <th class="inventory-column-type" scope="col">Tipo</th>
+                    <th class="inventory-column-description" scope="col">Descrição / Efeito</th>
                 </tr>
             </thead>
             <tbody id="inventoryBody">
@@ -476,12 +534,12 @@
         </table>
 
         <div class="title-bar">TRABALHO</div>
-        <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px;">
+        <div class="grid-4 work-primary-grid">
             <div class="box"><label for="occupation">Ocupação</label><input type="text" id="occupation" value=""></div>
             <div class="box"><label for="weeklyIncome">Ganho Semanal (PR)</label><input type="number" id="weeklyIncome" step="0.25" value=""></div>
             <div class="box"><label for="workSchedule">Horário</label><input type="text" id="workSchedule" value=""></div>
         </div>
-        <div class="grid-4" style="gap: 12px; margin-bottom: 20px;">
+        <div class="grid-4 work-secondary-grid">
             <div class="box"><label for="balance">Saldo (PR)</label><input type="number" id="balance" step="0.25" value=""></div>
             <div class="box"><label for="weeklyCost">Custo Semanal (PR)</label><input type="number" id="weeklyCost" step="0.25" value=""></div>
             <div class="box"><label for="workAttribute">Atributo</label><input type="text" id="workAttribute" value=""></div>
@@ -489,7 +547,7 @@
         </div>
 
         <div class="title-bar" id="notesTitle">ANOTAÇÕES</div>
-        <textarea class="notes-area" aria-labelledby="notesTitle" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
+        <textarea class="notes-area notes-area-initial" aria-labelledby="notesTitle" placeholder="Anotações da campanha..."></textarea>
     </div>
     <div id="skillModalOverlay" class="skill-modal-overlay" hidden inert aria-hidden="true">
         <div class="skill-modal-box" role="dialog" aria-modal="true" aria-labelledby="skillModalTitle"
@@ -505,9 +563,9 @@
                     <input type="text" id="s_tipo" value="">
                 </div>
             </div>
-            <div style="margin-top:10px;">
+            <div class="skill-description-field">
                 <label for="s_desc">Descrição</label>
-                <textarea id="s_desc" rows="4" style="width:100%; border:1px solid #dcdde1; border-radius:4px; padding:6px; background:#f9f9f9;"></textarea>
+                <textarea id="s_desc" class="skill-description-input" rows="4"></textarea>
             </div>
             <p id="skillModalError" class="form-error" role="alert" aria-live="assertive" hidden></p>
             <div class="skill-modal-actions">
@@ -594,16 +652,32 @@
         }
 
         function downloadCurrentSheet(filename) {
-            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = createUiElement('a');
-            link.href = url;
-            link.download = filename;
-            link.hidden = true;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 0);
+            let link;
+            let url;
+
+            try {
+                const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+                url = URL.createObjectURL(blob);
+                link = createUiElement('a');
+                link.href = url;
+                link.download = filename;
+                link.hidden = true;
+                document.body.appendChild(link);
+                link.click();
+            } finally {
+                link?.remove();
+                if (url) setTimeout(() => URL.revokeObjectURL(url), 0);
+            }
+        }
+
+        function requestCurrentSheetDownload(filename) {
+            try {
+                downloadCurrentSheet(filename);
+                return true;
+            } catch {
+                window.alert('Não foi possível iniciar o download. Verifique as permissões do navegador e tente novamente.');
+                return false;
+            }
         }
 
         const titulosData = {
@@ -840,8 +914,9 @@
         function saveFile() {
             const nome = sanitizeFilename(document.getElementById('charName').value, 'Ficha_Domador');
             const data = new Date().toLocaleDateString().replace(/\//g, '-');
-            downloadCurrentSheet(`DRPG_${nome}_${data}.html`);
-            hasUnsavedChanges = false;
+            if (requestCurrentSheetDownload(`DRPG_${nome}_${data}.html`)) {
+                hasUnsavedChanges = false;
+            }
         }
 
         window.addEventListener('load', init);

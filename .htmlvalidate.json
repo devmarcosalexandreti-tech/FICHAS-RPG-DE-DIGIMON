@@ -10,7 +10,7 @@
     "hidden-focusable": "error",
     "input-attributes": "off",
     "long-title": "off",
-    "no-inline-style": "off",
+    "no-inline-style": "error",
     "no-style-tag": "off",
     "prefer-button": "off",
     "prefer-native-element": "off",

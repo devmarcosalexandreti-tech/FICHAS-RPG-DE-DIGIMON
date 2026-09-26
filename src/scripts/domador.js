@@ -233,8 +233,9 @@
         function saveFile() {
             const nome = sanitizeFilename(document.getElementById('charName').value, 'Ficha_Domador');
             const data = new Date().toLocaleDateString().replace(/\//g, '-');
-            downloadCurrentSheet(`DRPG_${nome}_${data}.html`);
-            hasUnsavedChanges = false;
+            if (requestCurrentSheetDownload(`DRPG_${nome}_${data}.html`)) {
+                hasUnsavedChanges = false;
+            }
         }
 
         window.addEventListener('load', init);

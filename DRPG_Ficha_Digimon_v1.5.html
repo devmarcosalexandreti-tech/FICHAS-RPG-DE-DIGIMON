@@ -94,6 +94,37 @@
             outline: none;
         }
 
+        .memory-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 5px;
+        }
+
+        .memory-control {
+            text-align: center;
+        }
+
+        .memory-control-label {
+            font-size: 7px;
+            margin-bottom: 0;
+        }
+
+        .memory-control-input {
+            width: 35px;
+            text-align: center;
+        }
+
+        .memory-separator {
+            color: #24658f;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .combat-box {
+            margin-bottom: 10px;
+        }
+
         /* Estilo das Habilidades e Poderes */
         .skill-item {
             padding: 12px;
@@ -384,6 +415,12 @@
             border-bottom: 2px solid #eee;
         }
 
+        .modal-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .modal-box label {
             font-size: 10px;
             font-weight: bold;
@@ -496,15 +533,15 @@
             <div class="box"><label for="adaptability">Adaptabilidade</label><input type="number" id="adaptability" min="1" value=""></div>
             <div class="box"><label for="energyLimit">Lmt. Energia</label><input type="number" id="energyLimit" min="1" value=""></div>
             <div class="box" role="group" aria-labelledby="memoryLabel"><span id="memoryLabel" class="field-label">Memória</span>
-                <div style="display: flex; align-items: center; justify-content: space-around; gap: 5px;">
-                    <div style="text-align: center;"><label for="memoryBalance" style="font-size: 7px; margin-bottom: 0;">SALDO</label>
-                        <input type="number" id="memoryBalance" value="0" style="width: 35px; text-align: center;">
+                <div class="memory-controls">
+                    <div class="memory-control"><label for="memoryBalance" class="memory-control-label">SALDO</label>
+                        <input type="number" id="memoryBalance" class="memory-control-input" value="0">
                     </div>
 
-                    <span style="color: #24658f; font-weight: bold; margin-top: 10px;">|</span>
+                    <span class="memory-separator">|</span>
 
-                    <div style="text-align: center;"><label for="memoryTotal" style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
-                        <input type="number" id="memoryTotal" value="0" style="width: 35px; text-align: center;">
+                    <div class="memory-control"><label for="memoryTotal" class="memory-control-label">TOTAL</label>
+                        <input type="number" id="memoryTotal" class="memory-control-input" value="0">
                     </div>
                 </div>
             </div>
@@ -513,9 +550,9 @@
         <div class="title-bar">COMBATE</div>
 
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label for="spellList">Lista de Magias</label><input type="text" id="spellList" value="">
+            <div class="box combat-box"><label for="spellList">Lista de Magias</label><input type="text" id="spellList" value="">
             </div>
-            <div class="box" style="margin-bottom: 10px;">
+            <div class="box combat-box">
                 <label for="conditionSelectTrigger">Condições</label>
                 <div class="multiselect">
                     <button type="button" class="selectBox" id="conditionSelectTrigger" aria-expanded="false"
@@ -524,7 +561,7 @@
                         <span class="overSelect"></span>
                     </button>
 
-                    <div id="checkboxes" style="display: none;" role="group" aria-label="Condições do Digimon">
+                    <div id="checkboxes" role="group" aria-label="Condições do Digimon">
                         <div class="group-title">MENTAIS</div>
                         <label><input type="checkbox" value="Abalado"> Abalado</label>
                         <label><input type="checkbox" value="Encantado"> Encantado</label>
@@ -576,9 +613,9 @@
             </div>
         </div>
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label for="resistance">Resistência</label><input type="text" id="resistance" value="">
+            <div class="box combat-box"><label for="resistance">Resistência</label><input type="text" id="resistance" value="">
             </div>
-            <div class="box" style="margin-bottom: 10px;"><label for="vulnerability">Vulnerabilidade</label><input type="text" id="vulnerability" value="">
+            <div class="box combat-box"><label for="vulnerability">Vulnerabilidade</label><input type="text" id="vulnerability" value="">
             </div>
         </div>
 
@@ -675,7 +712,7 @@
         <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
             aria-describedby="modalError">
             <h2 id="modalTitle">Nova Habilidade</h2>
-            <div id="modalFields" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            <div id="modalFields" class="modal-fields"></div>
             <p id="modalError" class="form-error" role="alert" aria-live="assertive" hidden></p>
             <div class="modal-btns">
                 <button type="button" class="btn-cancel" id="modalCancelBtn">Cancelar</button>
@@ -760,16 +797,32 @@
         }
 
         function downloadCurrentSheet(filename) {
-            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = createUiElement('a');
-            link.href = url;
-            link.download = filename;
-            link.hidden = true;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 0);
+            let link;
+            let url;
+
+            try {
+                const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+                url = URL.createObjectURL(blob);
+                link = createUiElement('a');
+                link.href = url;
+                link.download = filename;
+                link.hidden = true;
+                document.body.appendChild(link);
+                link.click();
+            } finally {
+                link?.remove();
+                if (url) setTimeout(() => URL.revokeObjectURL(url), 0);
+            }
+        }
+
+        function requestCurrentSheetDownload(filename) {
+            try {
+                downloadCurrentSheet(filename);
+                return true;
+            } catch {
+                window.alert('Não foi possível iniciar o download. Verifique as permissões do navegador e tente novamente.');
+                return false;
+            }
         }
 
         let currentEditingEl = null;
@@ -1018,8 +1071,9 @@
         function saveFile() {
             const nome = sanitizeFilename(document.getElementById('charName').value, 'Ficha_Digimon');
             const data = new Date().toLocaleDateString().replace(/\//g, '-');
-            downloadCurrentSheet(`DRPG_${nome}_${data}.html`);
-            hasUnsavedChanges = false;
+            if (requestCurrentSheetDownload(`DRPG_${nome}_${data}.html`)) {
+                hasUnsavedChanges = false;
+            }
         }
 
         function showCheckboxes() {

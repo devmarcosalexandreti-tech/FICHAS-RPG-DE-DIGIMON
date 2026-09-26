@@ -20,7 +20,7 @@
             <div class="box"><label for="aspectPoints">P. Aspecto</label><input type="number" id="aspectPoints" value=""></div>
         </div>
 
-        <div class="grid-5" style="margin-top: 10px;">
+        <div class="grid-5 identity-secondary">
             <div class="box"><label for="sex">Sexo</label><input type="text" id="sex" value=""></div>
             <div class="box"><label for="age">Idade</label><input type="number" id="age" value=""></div>
             <div class="box"><label for="height">Altura (m)</label><input type="number" id="height" step="0.1" min="1.0" max="2.5" value="">
@@ -30,12 +30,12 @@
         </div>
 
         <div class="title-bar">CONVICÇÃO &amp; ASPECTOS</div>
-        <div class="box" style="margin-bottom: 10px; border-left: 5px solid #a84300;">
-            <input type="text" value="Convicção" aria-label="Nome da convicção" style="font-size: 14px; color: #a84300;">
+        <div class="box conviction-box">
+            <input type="text" class="conviction-name" value="Convicção" aria-label="Nome da convicção">
             <textarea rows="2" aria-label="Descrição da convicção"></textarea>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="aspects-grid">
             <div class="box"><input type="text" value="Aspecto 1" aria-label="Nome do aspecto 1"><textarea rows="4" aria-label="Descrição do aspecto 1">Descrição</textarea></div>
             <div class="box"><input type="text" value="Aspecto 2" aria-label="Nome do aspecto 2"><textarea rows="4" aria-label="Descrição do aspecto 2">Descrição</textarea></div>
             <div class="box"><input type="text" value="Aspecto 3" aria-label="Nome do aspecto 3"><textarea rows="4" aria-label="Descrição do aspecto 3">Descrição</textarea></div>
@@ -59,12 +59,12 @@
 
 {{COMPONENT_INVENTORY}}
         <div class="title-bar">TRABALHO</div>
-        <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px;">
+        <div class="grid-4 work-primary-grid">
             <div class="box"><label for="occupation">Ocupação</label><input type="text" id="occupation" value=""></div>
             <div class="box"><label for="weeklyIncome">Ganho Semanal (PR)</label><input type="number" id="weeklyIncome" step="0.25" value=""></div>
             <div class="box"><label for="workSchedule">Horário</label><input type="text" id="workSchedule" value=""></div>
         </div>
-        <div class="grid-4" style="gap: 12px; margin-bottom: 20px;">
+        <div class="grid-4 work-secondary-grid">
             <div class="box"><label for="balance">Saldo (PR)</label><input type="number" id="balance" step="0.25" value=""></div>
             <div class="box"><label for="weeklyCost">Custo Semanal (PR)</label><input type="number" id="weeklyCost" step="0.25" value=""></div>
             <div class="box"><label for="workAttribute">Atributo</label><input type="text" id="workAttribute" value=""></div>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="title-bar" id="notesTitle">ANOTAÇÕES</div>
-        <textarea class="notes-area" aria-labelledby="notesTitle" placeholder="Anotações da campanha..." style="height: 354px;"></textarea>
+        <textarea class="notes-area notes-area-initial" aria-labelledby="notesTitle" placeholder="Anotações da campanha..."></textarea>
     </div>
 {{COMPONENT_MODAL}}
 <button type="button" id="btnSalvar"><span aria-hidden="true">💾</span> Baixar Ficha</button>

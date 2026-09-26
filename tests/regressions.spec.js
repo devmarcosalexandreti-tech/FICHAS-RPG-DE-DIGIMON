@@ -70,6 +70,26 @@ for (const sheet of SHEET_CASES) {
       expect(sanitizedFilename).not.toMatch(/[<>:"/\\|?*\u0000-\u001F]/);
       expect(sanitizedFilename).toMatch(/_final_[0-9-]+\.html$/);
     });
+
+    test("mantém alterações pendentes quando o download não pode ser iniciado", async ({ page }) => {
+      await openSheet(page, sheet.filename);
+      await page.locator("#charName").fill(`Falha ${sheet.name}`);
+      await page.evaluate(() => {
+        HTMLAnchorElement.prototype.click = () => {
+          throw new Error("download indisponível");
+        };
+      });
+
+      let errorMessage = "";
+      page.once("dialog", async (dialog) => {
+        errorMessage = dialog.message();
+        await dialog.accept();
+      });
+      await page.locator("#btnSalvar").click();
+
+      expect(errorMessage).toContain("Não foi possível iniciar o download");
+      expect(await preventsUnload(page)).toBe(true);
+    });
   });
 }
 

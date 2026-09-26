@@ -73,14 +73,30 @@
         }
 
         function downloadCurrentSheet(filename) {
-            const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = createUiElement('a');
-            link.href = url;
-            link.download = filename;
-            link.hidden = true;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 0);
+            let link;
+            let url;
+
+            try {
+                const blob = new Blob([serializeCurrentSheet()], { type: 'text/html;charset=utf-8' });
+                url = URL.createObjectURL(blob);
+                link = createUiElement('a');
+                link.href = url;
+                link.download = filename;
+                link.hidden = true;
+                document.body.appendChild(link);
+                link.click();
+            } finally {
+                link?.remove();
+                if (url) setTimeout(() => URL.revokeObjectURL(url), 0);
+            }
+        }
+
+        function requestCurrentSheetDownload(filename) {
+            try {
+                downloadCurrentSheet(filename);
+                return true;
+            } catch {
+                window.alert('Não foi possível iniciar o download. Verifique as permissões do navegador e tente novamente.');
+                return false;
+            }
         }

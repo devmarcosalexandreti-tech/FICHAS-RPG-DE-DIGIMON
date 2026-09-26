@@ -36,15 +36,15 @@
             <div class="box"><label for="adaptability">Adaptabilidade</label><input type="number" id="adaptability" min="1" value=""></div>
             <div class="box"><label for="energyLimit">Lmt. Energia</label><input type="number" id="energyLimit" min="1" value=""></div>
             <div class="box" role="group" aria-labelledby="memoryLabel"><span id="memoryLabel" class="field-label">Memória</span>
-                <div style="display: flex; align-items: center; justify-content: space-around; gap: 5px;">
-                    <div style="text-align: center;"><label for="memoryBalance" style="font-size: 7px; margin-bottom: 0;">SALDO</label>
-                        <input type="number" id="memoryBalance" value="0" style="width: 35px; text-align: center;">
+                <div class="memory-controls">
+                    <div class="memory-control"><label for="memoryBalance" class="memory-control-label">SALDO</label>
+                        <input type="number" id="memoryBalance" class="memory-control-input" value="0">
                     </div>
 
-                    <span style="color: #24658f; font-weight: bold; margin-top: 10px;">|</span>
+                    <span class="memory-separator">|</span>
 
-                    <div style="text-align: center;"><label for="memoryTotal" style="font-size: 7px; margin-bottom: 0;">TOTAL</label>
-                        <input type="number" id="memoryTotal" value="0" style="width: 35px; text-align: center;">
+                    <div class="memory-control"><label for="memoryTotal" class="memory-control-label">TOTAL</label>
+                        <input type="number" id="memoryTotal" class="memory-control-input" value="0">
                     </div>
                 </div>
             </div>
@@ -53,9 +53,9 @@
         <div class="title-bar">COMBATE</div>
 
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label for="spellList">Lista de Magias</label><input type="text" id="spellList" value="">
+            <div class="box combat-box"><label for="spellList">Lista de Magias</label><input type="text" id="spellList" value="">
             </div>
-            <div class="box" style="margin-bottom: 10px;">
+            <div class="box combat-box">
                 <label for="conditionSelectTrigger">Condições</label>
                 <div class="multiselect">
                     <button type="button" class="selectBox" id="conditionSelectTrigger" aria-expanded="false"
@@ -64,7 +64,7 @@
                         <span class="overSelect"></span>
                     </button>
 
-                    <div id="checkboxes" style="display: none;" role="group" aria-label="Condições do Digimon">
+                    <div id="checkboxes" role="group" aria-label="Condições do Digimon">
                         <div class="group-title">MENTAIS</div>
                         <label><input type="checkbox" value="Abalado"> Abalado</label>
                         <label><input type="checkbox" value="Encantado"> Encantado</label>
@@ -116,9 +116,9 @@
             </div>
         </div>
         <div class="grid-2">
-            <div class="box" style="margin-bottom: 10px;"><label for="resistance">Resistência</label><input type="text" id="resistance" value="">
+            <div class="box combat-box"><label for="resistance">Resistência</label><input type="text" id="resistance" value="">
             </div>
-            <div class="box" style="margin-bottom: 10px;"><label for="vulnerability">Vulnerabilidade</label><input type="text" id="vulnerability" value="">
+            <div class="box combat-box"><label for="vulnerability">Vulnerabilidade</label><input type="text" id="vulnerability" value="">
             </div>
         </div>
 
