@@ -4,7 +4,7 @@ Obrigado pelo interesse em melhorar as Fichas HTML ASAFE. O requisito principal 
 
 ## Preparação
 
-Pré-requisitos: Node.js 20.17 ou superior, npm 10 ou superior e Git.
+Pré-requisitos: Node.js 24.8 ou superior, npm 10 ou superior e Git.
 
 ```powershell
 npm ci
@@ -54,4 +54,4 @@ Snapshots só podem ser atualizados depois de comparar a imagem esperada, a rece
 
 ## Segurança
 
-Não abra uma issue pública contendo credenciais ou detalhes que facilitem exploração. Use o canal privado de segurança definido pelo mantenedor quando o repositório público estiver configurado.
+Não abra uma issue pública contendo credenciais ou detalhes que facilitem exploração. Siga [SECURITY.md](SECURITY.md) e use o relato privado de vulnerabilidade do GitHub.

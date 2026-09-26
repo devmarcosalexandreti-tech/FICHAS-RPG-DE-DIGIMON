@@ -1,5 +1,8 @@
 # Fichas HTML ASAFE
 
+[![CI](https://github.com/devmarcosalexandreti-tech/FICHAS-RPG-DE-DIGIMON/actions/workflows/ci.yml/badge.svg)](https://github.com/devmarcosalexandreti-tech/FICHAS-RPG-DE-DIGIMON/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Fichas autocontidas de Digimon e Domador para preenchimento diretamente no navegador. Cada ficha reúne HTML, CSS e JavaScript em um único arquivo que pode ser aberto, editado, baixado e reaberto sem servidor ou conexão com a internet.
 
 ## Problema resolvido
@@ -26,6 +29,7 @@ As imagens acima são os baselines reais utilizados pelos testes de regressão v
 - navegação de modal por teclado, contenção de foco e nomes acessíveis;
 - aviso de alterações não salvas;
 - download da ficha com o estado atual incorporado;
+- mensagem de erro quando o navegador impede o início síncrono do download;
 - reabertura e novos salvamentos do HTML baixado;
 - sanitização do nome do arquivo e serialização segura da entrada do usuário;
 - funcionamento offline e sem dependências de runtime.
@@ -41,6 +45,8 @@ Não é necessário instalar Node.js para preencher as fichas.
 5. Abra o HTML baixado para continuar a edição posteriormente.
 
 O arquivo baixado contém o estado atual dos controles. Textos digitados são serializados como texto ou atributos escapados e não são interpretados como marcação executável.
+
+Os artefatos versionados também estão disponíveis na [release mais recente](https://github.com/devmarcosalexandreti-tech/FICHAS-RPG-DE-DIGIMON/releases/latest).
 
 ## Arquitetura
 
@@ -79,7 +85,7 @@ Essa separação mantém os fontes legíveis sem quebrar o requisito de distribu
 
 ### Pré-requisitos
 
-- Node.js 20.17 ou superior;
+- Node.js 24.8 ou superior;
 - npm 10 ou superior;
 - Git.
 
@@ -133,6 +139,8 @@ Detalhes da estratégia, do escopo e das limitações estão em [TESTING.md](TES
 ├── unit-tests/                    testes Node
 ├── DRPG_Ficha_Digimon_v1.5.html   artefato distribuível
 ├── DRPG_Ficha_Domador_v1.4.html   artefato distribuível
+├── LICENSE                        licença MIT
+├── SECURITY.md                    política de segurança
 ├── TESTING.md                     estratégia de testes
 └── REGRESSION_CHECKLIST.md        validação manual
 ```
@@ -146,7 +154,18 @@ Detalhes da estratégia, do escopo e das limitações estão em [TESTING.md](TES
 
 Um HTML é código executável por definição. Abra fichas recebidas de terceiros somente quando confiar na origem; a proteção da serialização cobre a entrada digitada na aplicação, não código previamente inserido por outra pessoa no arquivo.
 
-Não publique credenciais em issues. Relatos de segurança devem ser enviados por um canal privado definido pelo mantenedor do futuro repositório público.
+Não publique credenciais em issues. Consulte [SECURITY.md](SECURITY.md) para enviar relatos pelo canal privado do GitHub.
+
+## Matriz de suporte
+
+| Ambiente | Estado |
+| --- | --- |
+| Windows + Chromium | Suportado e coberto por fluxos e snapshots automatizados |
+| Uso offline por `file://` | Suportado e coberto pelos testes principais |
+| Firefox e WebKit | Não validados |
+| Leitor de tela real | Validação manual pendente |
+| Layout móvel | Fora do escopo atual |
+| Impressão | Sem suíte visual dedicada |
 
 ## Limitações conhecidas
 
@@ -154,14 +173,13 @@ Não publique credenciais em issues. Relatos de segurança devem ser enviados po
 - Os snapshots visuais possuem Windows/Chromium como plataforma canônica.
 - Não há sincronização em nuvem, colaboração simultânea ou armazenamento centralizado.
 - Impressão não possui uma suíte visual dedicada.
-- Bloqueios de download impostos por políticas específicas do navegador dependem de validação manual.
+- Falhas síncronas ao iniciar o download exibem uma mensagem e preservam o aviso de alterações não salvas. Bloqueios silenciosos impostos por políticas do navegador ainda dependem de validação manual.
 
 ## Melhorias futuras possíveis
 
 - avaliar layout responsivo caso mobile se torne requisito;
-- reduzir estilos inline restantes de forma incremental e visualmente validada;
 - ampliar a validação manual com leitor de tela real;
-- criar releases contendo os HTMLs gerados após a publicação do repositório.
+- avaliar Firefox, WebKit, impressão e layout móvel somente quando entrarem no escopo suportado.
 
 ## Contribuição
 
@@ -169,4 +187,6 @@ Consulte [CONTRIBUTING.md](CONTRIBUTING.md) antes de propor alterações. Mudan�
 
 ## Licença
 
-Este projeto ainda não possui uma licença definida. A publicação do código não concede automaticamente permissão de reutilização; o arquivo `LICENSE` deve ser adicionado somente após decisão explícita do titular.
+O código-fonte é disponibilizado sob a [licença MIT](LICENSE).
+
+Digimon e marcas relacionadas pertencem aos seus respectivos titulares. Este é um projeto independente de apoio a RPG, sem afiliação ou endosso dos detentores dessas marcas.

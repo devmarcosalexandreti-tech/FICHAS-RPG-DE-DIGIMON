@@ -8,6 +8,25 @@
 **HEAD auditado:** `6aea6a9` (`test: expand sheet regression coverage`)  
 **Branch principal local:** `master` em `8af0eda`  
 
+## Estado dos achados após a remediação
+
+Esta tabela registra o resultado posterior sem alterar o diagnóstico histórico detalhado abaixo.
+
+| Achado | Estado atual |
+| --- | --- |
+| AT-01 — fontes e artefatos dessincronizados | Resolvido: build determinístico, `build:check` e artefatos versionados em conjunto |
+| AT-02 — acessibilidade dos artefatos | Resolvido na automação: nomes, foco, teclado e contraste cobertos; leitor de tela real permanece manual |
+| AT-03 — Playwright local e CI ausente | Resolvido: Chromium gerenciado e GitHub Actions em Windows/Node 24 |
+| AT-04 — layout fixo | Aceito e documentado como escopo desktop; mobile não é anunciado como suportado |
+| AT-05 — infraestrutura pública | Resolvido: remote público, README com imagens, licença MIT, CI e releases |
+| AT-06 — cobertura de acessibilidade/plataformas | Parcial por decisão de escopo: automação em Chromium; leitor de tela, Firefox, WebKit e impressão documentados como não validados |
+| AT-07 — estilos inline | Resolvido: estilos estáticos extraídos e `no-inline-style` reativado |
+| AT-08 — modal morto | Resolvido no commit `6fcdc01` |
+| AT-09 — cenários E2E extensos | Mitigado com helpers e cenários de regressão separados |
+| AT-10 — falha de download | Mitigado: falhas síncronas geram mensagem e não limpam o estado sujo; bloqueios silenciosos continuam manuais |
+| AT-11 — domínios numéricos | Mantido como risco potencial até definição formal das regras; limites existentes foram preservados |
+| AT-12 — fim de linha | Resolvido por `.gitattributes` |
+
 ## 1. Resumo executivo
 
 O projeto é uma aplicação front-end estática, sem framework, composta por HTML, CSS e JavaScript nativos. Durante o desenvolvimento, templates, componentes, estilos e scripts permanecem separados em `src/`; o build os incorpora em duas fichas HTML autocontidas, executáveis offline e distribuíveis como arquivos únicos.

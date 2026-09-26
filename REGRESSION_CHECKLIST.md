@@ -35,6 +35,7 @@ Execute este roteiro nos dois arquivos após alterações de HTML, CSS ou JavaSc
 ## Salvamento e reabertura
 
 - [ ] `Baixar Ficha` gera um arquivo `.html` com nome válido.
+- [ ] Quando o início do download falha, uma mensagem é exibida e a ficha continua marcada como não salva.
 - [ ] Nome, campos numéricos, anotações, condições e inventário persistem.
 - [ ] Habilidades e poderes persistem com os botões de edição e exclusão funcionais.
 - [ ] A ficha reaberta pode ser editada e salva novamente.
@@ -46,3 +47,9 @@ Execute este roteiro nos dois arquivos após alterações de HTML, CSS ou JavaSc
 - [ ] Testar aspas, apóstrofo, `&`, `<`, `>` e `</textarea>`.
 - [ ] Os caracteres persistem corretamente após salvar e reabrir.
 - [ ] Não aparecem sequências de mojibake como `Ã`, `Â`, `ðŸ` ou `�`.
+
+## Plataformas fora da automação
+
+- [ ] Validar com leitor de tela real antes de declarar suporte assistivo completo.
+- [ ] Validar Firefox, WebKit, impressão e viewport móvel somente quando esses ambientes entrarem no escopo suportado.
+- [ ] Confirmar manualmente políticas corporativas ou bloqueios silenciosos de download do navegador.
